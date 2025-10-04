@@ -333,72 +333,74 @@ function Predict() {
   }
 
   return (
-    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-      {/* Enhanced Space Background */}
-      <EnhancedSpaceBackground enableParticles={true} nebulaDensity={0.5} />
-
-      {/* Page Header with Animation */}
-      <div className="text-center mb-8">
-        <div className="mb-4 flex justify-center">
-          <AnimatedPlanet size="medium" variant="primary" />
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold mb-3">
-          <span className="bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent">
-            AI Prediction Engine
-          </span>
-        </h1>
-        <p className="text-base text-gray-300 max-w-2xl mx-auto mb-4">
-          Use our state-of-the-art pretrained models to detect exoplanets in your light curve data instantly.
-        </p>
+    <div className="section-padding">
+      <div className="max-w-7xl mx-auto container-padding">
         
-        {/* Mode Toggle */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-1 inline-flex">
-            <button
-              onClick={() => setMode('manual')}
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm ${
-                mode === 'manual'
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Manual Input
-            </button>
-            <button
-              onClick={() => setMode('csv')}
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm ${
-                mode === 'csv'
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              CSV Upload
-            </button>
+        {/* Page Header - Minimalist */}
+        <section className="text-center mb-16">
+          <h1 className="heading-primary mb-6">
+            PREDICTION ENGINE
+            <br />
+            {/* <span className="text-neon animate-glow">ENGINE</span> */}
+          </h1>
+          <p className="text-xl text-contrast-medium mb-12 max-w-4xl mx-auto font-light">
+            Use state-of-the-art pretrained models to detect exoplanets in light curve data.
+            <br />
+            <span className="text-contrast-high font-semibold">Instant analysis with 96%+ accuracy.</span>
+          </p>
+          
+          {/* Mode Toggle - Minimalist Design */}
+          <div className="flex justify-center mb-12">
+            <div className="bg-dark-card border border-dark-border rounded-xl p-1 flex">
+              <button
+                onClick={() => setMode('manual')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+                  mode === 'manual'
+                    ? 'bg-neon-cyan text-dark-bg shadow-lg shadow-neon-cyan/30'
+                    : 'text-contrast-medium hover:text-contrast-high'
+                }`}
+              >
+                MANUAL INPUT
+              </button>
+              <button
+                onClick={() => setMode('csv')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+                  mode === 'csv'
+                    ? 'bg-neon-cyan text-dark-bg shadow-lg shadow-neon-cyan/30'
+                    : 'text-contrast-medium hover:text-contrast-high'
+                }`}
+              >
+                CSV UPLOAD
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
+          
+          {/* Visual Separator */}
+          <div className="w-32 h-0.5 bg-neon-cyan mx-auto mb-12 animate-neon-pulse"></div>
+        </section>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
-        {/* Main Prediction Area */}
-        <div className="xl:col-span-2 space-y-4 lg:space-y-6">
-          {/* Animated Planet Display - Shows when predicting */}
-          {predicting && (
-            <div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 backdrop-blur-md border border-indigo-500/30 rounded-2xl p-4 lg:p-6">
-              <div className="flex flex-col items-center justify-center space-y-3">
-                <AnimatedPlanet size="medium" variant="primary" />
-                <div className="text-center">
-                  <h3 className="text-base lg:text-lg font-semibold mb-2">
-                    {mode === 'csv' ? 'Processing CSV Data...' : 'Analyzing Stellar Data...'}
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          {/* Main Prediction Area */}
+          <div className="xl:col-span-2 space-y-4 lg:space-y-6">
+            {/* Processing Animation */}
+            {predicting && (
+            <div className="card-dark text-center">
+              <div className="flex flex-col items-center justify-center space-y-6">
+                <div className="w-16 h-16 border-4 border-neon-cyan border-t-transparent rounded-full animate-spin"></div>
+                <div>
+                  <h3 className="heading-tertiary mb-2 text-neon-cyan">
+                    {mode === 'csv' ? 'PROCESSING CSV DATA' : 'ANALYZING STELLAR DATA'}
                   </h3>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-contrast-medium">
                     {mode === 'csv' 
-                      ? 'AI is analyzing multiple data points from your file' 
-                      : 'AI is processing planetary transit characteristics'}
+                      ? 'AI analyzing multiple data points from your file' 
+                      : 'AI processing planetary transit characteristics'}
                   </p>
                 </div>
                 <div className="w-full max-w-md">
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-[shimmer_1.5s_ease-in-out_infinite]"></div>
+                  <div className="h-2 bg-dark-border rounded-full overflow-hidden">
+                    <div className="h-full bg-neon-cyan animate-pulse"></div>
                   </div>
                 </div>
               </div>
@@ -407,7 +409,7 @@ function Predict() {
 
           {/* Feature Importance Analysis - Mobile/Tablet View */}
           <div className="xl:hidden">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 lg:p-4">
+            <div className="card-dark">
               <FeatureImportance 
                 featureImportance={modelFeatureImportance}
                 modelId={selectedModel}
@@ -417,10 +419,10 @@ function Predict() {
 
           {/* CSV Upload Section */}
           {mode === 'csv' && (
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+            <div className="card-dark">
               <div className="flex items-center space-x-3 mb-6">
-                <Upload className="w-6 h-6 text-indigo-400" />
-                <h2 className="text-xl font-semibold">Upload CSV File</h2>
+                <Upload className="w-6 h-6 text-neon-cyan" />
+                <h2 className="heading-tertiary">UPLOAD CSV FILE</h2>
               </div>
 
               {/* File Upload Area */}
@@ -429,28 +431,28 @@ function Predict() {
                   htmlFor="csv-upload"
                   className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${
                     uploadedFile
-                      ? 'border-green-500/50 bg-green-500/10'
-                      : 'border-white/20 bg-white/5 hover:bg-white/10 hover:border-indigo-500/50'
+                      ? 'border-neon-green bg-neon-green/10'
+                      : 'border-dark-border bg-dark-surface hover:bg-dark-hover hover:border-neon-cyan/50'
                   }`}
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     {uploadedFile ? (
                       <>
-                        <CheckCircle className="w-12 h-12 text-green-400 mb-3" />
-                        <p className="mb-2 text-sm text-green-400 font-semibold">
+                        <CheckCircle className="w-12 h-12 text-neon-green mb-3" />
+                        <p className="mb-2 text-sm text-neon-green font-semibold">
                           {uploadedFile.name}
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-contrast-low">
                           {(uploadedFile.size / 1024).toFixed(2)} KB
                         </p>
                       </>
                     ) : (
                       <>
-                        <FileText className="w-12 h-12 text-gray-400 mb-3" />
-                        <p className="mb-2 text-sm text-gray-300">
+                        <FileText className="w-12 h-12 text-contrast-low mb-3" />
+                        <p className="mb-2 text-sm text-contrast-medium">
                           <span className="font-semibold">Click to upload</span> or drag and drop
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-contrast-low">
                           CSV files with light curve data (MAX. 100MB)
                         </p>
                       </>
@@ -468,10 +470,10 @@ function Predict() {
 
               {/* CSV File Info */}
               {uploadedFile && (
-                <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-4 mb-6">
+                <div className="bg-neon-cyan/10 border border-neon-cyan/30 rounded-xl p-4 mb-6">
                   <div className="flex items-start space-x-3">
-                    <Sparkles className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" />
-                    <div className="text-sm text-indigo-300">
+                    <Sparkles className="w-5 h-5 text-neon-cyan mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-neon-cyan">
                       <p className="font-medium mb-1">CSV Requirements:</p>
                       <ul className="space-y-1 text-xs">
                         <li>• Must contain light curve data columns</li>
@@ -489,35 +491,35 @@ function Predict() {
                 <button
                   onClick={handleCsvPredict}
                   disabled={!uploadedFile || predicting}
-                  className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-indigo-500/50"
+                  className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {predicting ? (
                     <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                      <span>Processing...</span>
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-current border-t-transparent"></div>
+                      <span>PROCESSING...</span>
                     </>
                   ) : (
                     <>
                       <Zap className="w-5 h-5" />
-                      <span>Analyze CSV</span>
+                      <span>ANALYZE CSV</span>
                     </>
                   )}
                 </button>
                 {uploadedFile && (
                   <button
                     onClick={resetCsvUpload}
-                    className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 flex items-center space-x-2"
+                    className="btn-secondary"
                   >
                     <XCircle className="w-5 h-5" />
-                    <span>Clear</span>
+                    <span>CLEAR</span>
                   </button>
                 )}
               </div>
 
-              {/* Orbiting Planets Animation */}
-              <div className="mt-8 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 rounded-xl p-6 overflow-hidden">
-                <h3 className="text-lg font-semibold mb-4 text-center">
-                  Planetary Detection in Progress
+              {/* Visual Enhancement */}
+              <div className="mt-8 bg-neon-purple/10 border border-neon-purple/30 rounded-xl p-6 overflow-hidden">
+                <h3 className="heading-tertiary mb-4 text-center text-neon-purple">
+                  PLANETARY DETECTION IN PROGRESS
                 </h3>
                 <OrbitingPlanets />
               </div>
@@ -526,25 +528,25 @@ function Predict() {
 
           {/* Parameter Input Form */}
           {mode === 'manual' && (
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+          <div className="card-dark">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
-                <BarChart3 className="w-6 h-6 text-indigo-400" />
-                <h2 className="text-xl font-semibold">Input Parameters</h2>
+                <BarChart3 className="w-6 h-6 text-neon-cyan" />
+                <h2 className="heading-tertiary">INPUT PARAMETERS</h2>
               </div>
               <button
                 onClick={resetParameters}
-                className="flex items-center space-x-2 text-sm text-gray-400 hover:text-white transition-colors"
+                className="flex items-center space-x-2 text-sm text-contrast-low hover:text-contrast-high transition-colors"
               >
                 <RotateCcw className="w-4 h-4" />
-                <span>Reset</span>
+                <span>RESET</span>
               </button>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Orbital Period */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-contrast-medium mb-2">
                   Orbital Period (days)
                 </label>
                 <input
@@ -552,7 +554,7 @@ function Predict() {
                   step="0.1"
                   value={parameters.koi_period}
                   onChange={(e) => handleParameterChange('koi_period', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-dark-surface border border-dark-border rounded-lg text-contrast-high focus:outline-none focus:ring-2 focus:ring-neon-cyan focus:border-neon-cyan contrast-border-focus"
                 />
                 <input
                   type="range"
@@ -561,7 +563,7 @@ function Predict() {
                   step="0.5"
                   value={parameters.koi_period}
                   onChange={(e) => handleParameterChange('koi_period', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-neon-cyan"
                 />
               </div>
 
@@ -846,17 +848,17 @@ function Predict() {
             <button
               onClick={handlePredict}
               disabled={predicting}
-              className="w-full mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-indigo-500/50"
+              className="btn-primary w-full mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {predicting ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                  <span>Analyzing...</span>
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-current border-t-transparent"></div>
+                  <span>ANALYZING...</span>
                 </>
               ) : (
                 <>
                   <Zap className="w-5 h-5" />
-                  <span>Run Prediction</span>
+                  <span>RUN PREDICTION</span>
                 </>
               )}
             </button>
@@ -869,68 +871,56 @@ function Predict() {
               <div className="flex items-start space-x-3">
                 <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-red-300">
-                  <p className="font-medium mb-1">Error</p>
+                  <p className="font-medium mb-1">ERROR</p>
                   <p>{error}</p>
                 </div>
               </div>
             </div>
           )}
-        </div>
+          </div>
 
-        {/* Model Selection Panel */}
-        <div className="space-y-3 lg:space-y-4">
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 lg:p-4">
-            <div className="flex items-center space-x-3 mb-3 lg:mb-4">
-              <BarChart3 className="w-4 h-4 lg:w-5 lg:h-5 text-yellow-400" />
-              <h2 className="text-base lg:text-lg font-semibold">Select Model</h2>
+          {/* Model Selection Panel */}
+          <div className="space-y-6">
+          <div className="card-dark">
+            <div className="flex items-center space-x-3 mb-6">
+              <BarChart3 className="w-5 h-5 text-neon-yellow" />
+              <h2 className="heading-tertiary">SELECT MODEL</h2>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
               {pretrainedModels.map((model) => (
                 <div
                   key={model.id}
                   onClick={() => setSelectedModel(model.id)}
-                  className={`p-2 lg:p-3 rounded-xl border cursor-pointer transition-all duration-200 ${
+                  className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
                     selectedModel === model.id
-                      ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300'
-                      : 'bg-white/5 border-white/10 hover:bg-white/10'
+                      ? 'bg-neon-cyan/10 border-neon-cyan/40 text-neon-cyan'
+                      : 'bg-dark-surface border-dark-border hover:bg-dark-hover hover:border-neon-cyan/30'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-semibold text-xs lg:text-sm truncate pr-2">{model.name}</h3>
-                    <span className="text-xs bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded flex-shrink-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-sm font-mono">{model.name}</h3>
+                    <span className="text-xs bg-neon-green/20 text-neon-green px-2 py-1 rounded font-bold">
                       {model.accuracy}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-400 mb-1 line-clamp-2">{model.description}</p>
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>{model.size}</span>
-                    <span className="truncate ml-2">{model.specialty}</span>
+                  <p className="text-xs text-contrast-medium mb-2">{model.description}</p>
+                  <div className="flex justify-between text-xs text-contrast-low">
+                    <span>SIZE: {model.size}</span>
+                    <span>SPECIALTY: {model.specialty}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Floating Astronaut - For visual appeal
-          <div className="bg-gradient-to-br from-purple-900/20 to-indigo-900/20 backdrop-blur-md border border-purple-500/20 rounded-2xl p-3 lg:p-4 overflow-hidden">
-            <div className="h-24 lg:h-32">
-              <FloatingAstronaut />
-            </div>
-            <div className="text-center mt-2">
-              <p className="text-xs text-gray-400 italic">
-                "Exploring the cosmos, one prediction at a time"
-              </p>
-            </div>
-          </div> */}
-
-          {/* Quick Stats */}
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 lg:p-4">
-            <h3 className="text-sm lg:text-base font-semibold mb-3">Model Performance</h3>
-            <div className="space-y-2">
+          {/* Model Performance Stats */}
+          <div className="card-dark">
+            <h3 className="heading-tertiary mb-4">MODEL PERFORMANCE</h3>
+            <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-400 text-xs">Accuracy:</span>
-                <span className="font-semibold text-xs">
+                <span className="text-contrast-low text-sm font-mono">ACCURACY:</span>
+                <span className="font-bold text-sm text-neon-green">
                   {pretrainedModels.find(m => m.id === selectedModel)?.accuracy}
                 </span>
               </div>
@@ -938,19 +928,19 @@ function Predict() {
           </div>
 
           {/* Feature Importance Analysis - Desktop Only */}
-          <div className="hidden xl:block bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 overflow-hidden">
+          <div className="hidden xl:block card-dark overflow-hidden">
             <FeatureImportance 
               featureImportance={modelFeatureImportance}
               modelId={selectedModel}
             />
           </div>
 
-          {/* Tips */}
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+          {/* Pro Tips */}
+          <div className="bg-neon-blue/10 border border-neon-blue/30 rounded-xl p-4">
             <div className="flex items-start space-x-3">
-              <Sparkles className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-blue-300">
-                <p className="font-medium mb-1">Pro Tips:</p>
+              <Sparkles className="w-5 h-5 text-neon-blue mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-neon-blue">
+                <p className="font-medium mb-1">PRO TIPS:</p>
                 <ul className="space-y-1 text-xs">
                   <li>• Choose model based on your data source</li>
                   <li>• Higher accuracy = better detection</li>
@@ -960,13 +950,13 @@ function Predict() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+          </div>
+        </div> {/* End grid */}
 
-      {/* Null Value Warning Modal */}
-      {showNullModal && nullValueInfo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-yellow-500/50 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+        {/* Null Value Warning Modal */}
+        {showNullModal && nullValueInfo && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-yellow-500/50 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
             {/* Header */}
             <div className="bg-yellow-500/20 border-b border-yellow-500/30 px-6 py-4">
               <div className="flex items-center space-x-3">
@@ -1066,67 +1056,71 @@ function Predict() {
                 </button>
               </div>
             </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Prediction Results Modal */}
-      {showResultsModal && confidence && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center  p-4 bg-black/70 backdrop-blur-sm">
-          <div className={`relative max-w-6xl w-full max-h-[95vh] overflow-hidden shadow-2xl rounded-2xl backdrop-blur-md border animate-[scaleIn_0.3s_ease-out] ${
-            confidence.exoplanetDetected 
-              ? 'bg-gradient-to-br from-green-900/40 to-blue-900/40 border-green-500/30'
-              : 'bg-gradient-to-br from-orange-900/40 to-red-900/40 border-orange-500/30'
-          }`}>
+        {/* Prediction Results Modal */}
+        {showResultsModal && confidence && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center  p-4 bg-black/70 backdrop-blur-sm">
+            <div className={`relative max-w-6xl w-full max-h-[95vh] overflow-hidden shadow-2xl rounded-2xl backdrop-blur-md border animate-[scaleIn_0.3s_ease-out] ${
+              confidence.exoplanetDetected 
+                ? 'bg-gradient-to-br from-green-900/40 to-blue-900/40 border-green-500/30'
+                : 'bg-gradient-to-br from-orange-900/40 to-red-900/40 border-orange-500/30'
+            }`}>
             {/* Modal Header */}
-            {mode != 'csv' && <div className="flex items-center justify-between p-6 border-b border-white/10">
-              <div className="flex items-center space-x-3">
-                <Globe className={`w-8 h-8 ${confidence.exoplanetDetected ? 'text-green-400' : 'text-orange-400'}`} />
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-bold">
-                    {confidence.prediction}
-                  </h2>
-                  <p className="text-sm text-gray-400">
-                    Analysis completed in {confidence.processingTime}
-                  </p>
+            {mode != 'csv' && (
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <div className="flex items-center space-x-3">
+                  <Globe className={`w-8 h-8 ${confidence.exoplanetDetected ? 'text-green-400' : 'text-orange-400'}`} />
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-bold">
+                      {confidence.prediction}
+                    </h2>
+                    <p className="text-sm text-gray-400">
+                      Analysis completed in {confidence.processingTime}
+                    </p>
+                  </div>
                 </div>
+                <button
+                  onClick={() => setShowResultsModal(false)}
+                  className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+                >
+                  <X className="w-6 h-6 text-gray-400 hover:text-white" />
+                </button>
               </div>
-              <button
-                onClick={() => setShowResultsModal(false)}
-                className="p-2 hover:bg-white/10 rounded-xl transition-colors"
-              >
-                <X className="w-6 h-6 text-gray-400 hover:text-white" />
-              </button>
-            </div>}
+            )}
 
             {/* Modal Content - Scrollable */}
             <div className="overflow-y-auto max-h-[80vh] p-6">
               {/* Overall Stats */}
-              {mode != 'csv' && <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <p className="text-sm text-gray-400 mb-2">Confidence Score</p>
-                  <p className="text-4xl font-bold text-indigo-400 mb-3">{confidence.overall.toFixed(2)}%</p>
-                  <div className="w-full bg-white/20 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-500"
-                      style={{ width: `${confidence.overall}%` }}
-                    ></div>
+              {mode != 'csv' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                    <p className="text-sm text-gray-400 mb-2">Confidence Score</p>
+                    <p className="text-4xl font-bold text-indigo-400 mb-3">{confidence.overall.toFixed(2)}%</p>
+                    <div className="w-full bg-white/20 rounded-full h-3">
+                      <div
+                        className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-500"
+                        style={{ width: `${confidence.overall}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                    <p className="text-sm text-gray-400 mb-2">Classification</p>
+                    <p className={`text-3xl font-bold ${
+                      confidence.exoplanetDetected ? 'text-green-400' : 'text-orange-400'
+                    }`}>
+                      {confidence.exoplanetDetected ? 'CONFIRMED' : 'FALSE POSITIVE'}
+                    </p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      {confidence.exoplanetDetected 
+                        ? 'This signal is likely a real exoplanet!' 
+                        : 'This signal may not be an exoplanet'}
+                    </p>
                   </div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <p className="text-sm text-gray-400 mb-2">Classification</p>
-                  <p className={`text-3xl font-bold ${
-                    confidence.exoplanetDetected ? 'text-green-400' : 'text-orange-400'
-                  }`}>
-                    {confidence.exoplanetDetected ? 'CONFIRMED' : 'FALSE POSITIVE'}
-                  </p>
-                  <p className="text-sm text-gray-400 mt-2">
-                    {confidence.exoplanetDetected 
-                      ? 'This signal is likely a real exoplanet!' 
-                      : 'This signal may not be an exoplanet'}
-                  </p>
-                </div>
-              </div>}
+              )}
 
               {/* CSV-specific Stats
               {mode === 'csv' && csvResults && (
@@ -1153,7 +1147,8 @@ function Predict() {
               )} */}
 
               {/* Individual Predictions */}
-             {mode != 'csv' && <div className="space-y-4 mb-8">
+              {mode != 'csv' && (
+                <div className="space-y-4 mb-8">
                 <h3 className="text-xl font-bold text-white mb-4">
                   {mode === 'csv' ? 'Top Candidates' : 'Prediction Details'}
                 </h3>
@@ -1244,7 +1239,8 @@ function Predict() {
                     </div>
                   </div>
                 ))}
-              </div>}
+              </div>
+              )}
 
               {/* Complete CSV Results Table */}
               {mode === 'csv' && allPredictions && allPredictions.length > 0 && (
@@ -1386,10 +1382,12 @@ function Predict() {
                 </button>
               </div>
             </div>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      
+      </div> {/* End max-w-7xl container */}
+    </div> 
   )
 }
 

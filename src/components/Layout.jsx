@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import {  Activity, Home, Search, Database, Info, Brain, Zap } from 'lucide-react'
+import { Home, Zap, Brain, Menu } from 'lucide-react'
 
 function Layout() {
   const location = useLocation()
@@ -8,8 +8,6 @@ function Layout() {
     { name: 'Home', href: '/', icon: Home },
     { name: 'Predict', href: '/predict', icon: Zap },
     { name: 'Training', href: '/training', icon: Brain },
-    // { name: 'Database', href: '/database', icon: Database },
-    // { name: 'About', href: '/about', icon: Info },
   ]
 
   const isActive = (path) => {
@@ -20,67 +18,65 @@ function Layout() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-space-darker via-space-dark to-space-blue text-white">
-      {/* Background Stars Effect */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white rounded-full opacity-60 animate-pulse-slow"></div>
-        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-white rounded-full opacity-40 animate-pulse"></div>
-        <div className="absolute bottom-1/4 left-1/2 w-1.5 h-1.5 bg-indigo-300 rounded-full opacity-50 animate-pulse-slow"></div>
-        <div className="absolute top-1/2 right-1/4 w-1 h-1 bg-white rounded-full opacity-30"></div>
-        <div className="absolute bottom-1/3 right-1/2 w-2 h-2 bg-purple-300 rounded-full opacity-40 animate-pulse"></div>
-      </div>
-
-      {/* Header */}
-      <header className="relative z-[999] border-b border-white/10 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-6">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            
+    <div className="min-h-screen bg-dark-bg bg-grid">
+      {/* Minimalist Header */}
+      <header className="sticky top-0 z-50 border-b border-dark-border bg-dark-bg/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto container-padding">
+          <div className="flex items-center justify-between py-4">
+            {/* Logo - Bold and Minimalist */}
+            <Link to="/" className="group flex items-center space-x-3 hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 bg-neon-cyan rounded-lg flex items-center justify-center">
+                <div className="w-4 h-4 bg-dark-bg rounded-full"></div>
+              </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
-                  ExoPlanet Detector
+                <h1 className="heading-tertiary text-contrast-high group-hover:text-neon-cyan transition-colors">
+                  EXOPLANET
                 </h1>
-                <p className="text-xs text-gray-400">Advanced AI Detection System</p>
+                <p className="text-xs text-contrast-low font-mono uppercase tracking-wider">
+                  AI DETECTOR
+                </p>
               </div>
             </Link>
 
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-1">
+            {/* Navigation - Clean and Bold */}
+            <nav className="hidden md:flex items-center space-x-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 ${
                     isActive(item.href)
-                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                      ? 'bg-neon-cyan text-dark-bg shadow-lg shadow-neon-cyan/30'
+                      : 'text-contrast-medium hover:text-contrast-high hover:bg-dark-hover'
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
-                  <span>{item.name}</span>
+                  <span className="font-mono uppercase tracking-wide text-sm">{item.name}</span>
                 </Link>
               ))}
             </nav>
 
-            
+            {/* Mobile Menu Button */}
+            <button className="md:hidden p-2 rounded-lg bg-dark-hover text-contrast-medium hover:text-contrast-high transition-colors">
+              <Menu className="w-5 h-5" />
+            </button>
           </div>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden pb-4">
-            <nav className="flex items-center space-x-1 overflow-x-auto">
+          <div className="md:hidden pb-4 border-t border-dark-border mt-4 pt-4">
+            <nav className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-semibold transition-all duration-200 ${
                     isActive(item.href)
-                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                      ? 'bg-neon-cyan text-dark-bg shadow-lg shadow-neon-cyan/30'
+                      : 'text-contrast-medium hover:text-contrast-high hover:bg-dark-hover'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.name}</span>
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-mono uppercase tracking-wide">{item.name}</span>
                 </Link>
               ))}
             </nav>
@@ -89,16 +85,25 @@ function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10">
+      <main className="relative">
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 mt-12 sm:mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-gray-400">
-            Powered by Advanced AI & Machine Learning • Exoplanet Database v1.0
-          </p>
+      {/* Minimalist Footer */}
+      <footer className="border-t border-dark-border mt-20">
+        <div className="max-w-7xl mx-auto container-padding py-8">
+          <div className="text-center">
+            <p className="text-contrast-low font-mono text-sm">
+              POWERED BY <span className="text-neon-cyan">AI</span> • EXOPLANET DATABASE v2.0
+            </p>
+            <div className="mt-2 flex justify-center space-x-4 text-xs text-contrast-low">
+              <span>HIGH CONTRAST</span>
+              <span>•</span>
+              <span>MINIMALIST DESIGN</span>
+              <span>•</span>
+              <span>DARK MODE</span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
