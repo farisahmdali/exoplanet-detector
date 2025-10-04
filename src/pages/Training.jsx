@@ -1,34 +1,48 @@
 import { useState } from 'react'
-import { Upload, Play, Settings, BarChart3, Brain, Download, Save, RefreshCw, AlertCircle } from 'lucide-react'
+import { Upload, Download, Zap, CheckCircle, AlertCircle, Info, BarChart3, Brain, Settings, FileText, Activity } from 'lucide-react'
 import { API_ENDPOINTS } from '../config/api'
-import AnimatedPlanet from '../components/AnimatedPlanet'
 
 function Training() {
-  const [trainingData, setTrainingData] = useState(null)
-  const [validationData, setValidationData] = useState(null)
-  const [isTraining, setIsTraining] = useState(false)
-  const [trainingProgress, setTrainingProgress] = useState(0)
+  const [trainingFile, setTrainingFile] = useState(null)
+  const [training, setTraining] = useState(false)
   const [trainingResults, setTrainingResults] = useState(null)
   const [error, setError] = useState(null)
+  const [modelName, setModelName] = useState('')
+  
+  // Hyperparameters
   const [hyperparameters, setHyperparameters] = useState({
-    learningRate: 0.001,
-    batchSize: 32,
-    epochs: 100,
-    hiddenLayers: 3,
-    neuronsPerLayer: 128,
-    dropout: 0.2,
-    optimizer: 'adam',
-    activation: 'relu'
+    model_type: 'random_forest',
+    test_size: 0.2,
+    random_state: 42,
+    // Random Forest params
+    n_estimators: 200,
+    max_depth: 50,
+    min_samples_split: 2,
+    criterion: 'gini',
+    class_weight: 'balanced',
+    // LightGBM params
+    learning_rate: 0.1,
+    num_leaves: 31,
   })
 
-  const handleFileUpload = (type, e) => {
-    const file = e.target.files[0]
+  const requiredColumns = [
+    'koi_fpflag_ss', 'koi_fpflag_ec', 'koi_period', 'koi_time0bk',
+    'koi_impact', 'koi_duration', 'koi_depth', 'koi_prad',
+    'koi_teq', 'koi_insol', 'koi_model_snr', 'koi_tce_plnt_num',
+    'koi_steff', 'koi_slogg', 'koi_srad', 'ra', 'dec', 'koi_kepmag',
+    'koi_disposition' // Target column (CONFIRMED or FALSE POSITIVE)
+  ]
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]
     if (file) {
-      if (type === 'training') {
-        setTrainingData(file)
-      } else {
-        setValidationData(file)
+      if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+        setError('Please upload a CSV file')
+        return
       }
+      setTrainingFile(file)
+      setError(null)
+      setTrainingResults(null)
     }
   }
 
@@ -39,41 +53,34 @@ function Training() {
     }))
   }
 
-  const startTraining = async () => {
-    if (!trainingData) return
-    
-    setIsTraining(true)
-    setTrainingProgress(0)
+  const handleTrainModel = async () => {
+    if (!trainingFile) {
+      setError('Please upload a training CSV file')
+      return
+    }
+
+    if (!modelName.trim()) {
+      setError('Please enter a model name')
+      return
+    }
+
+    setTraining(true)
     setError(null)
     
     try {
       const formData = new FormData()
-      formData.append('training_file', trainingData)
-      if (validationData) {
-        formData.append('validation_file', validationData)
-      }
+      formData.append('training_file', trainingFile)
+      formData.append('model_name', modelName)
       
       // Add hyperparameters
       Object.keys(hyperparameters).forEach(key => {
         formData.append(key, hyperparameters[key])
       })
       
-      // Simulate progress while waiting for response
-      const progressInterval = setInterval(() => {
-        setTrainingProgress(prev => {
-          if (prev >= 95) {
-            return 95 // Stop at 95% until we get response
-          }
-          return prev + 1
-        })
-      }, 50)
-      
       const response = await fetch(API_ENDPOINTS.TRAIN, {
         method: 'POST',
         body: formData
       })
-      
-      clearInterval(progressInterval)
       
       if (!response.ok) {
         const errorData = await response.json()
@@ -81,371 +88,454 @@ function Training() {
       }
       
       const data = await response.json()
-      
-      setTrainingProgress(100)
       setTrainingResults(data)
-      setIsTraining(false)
+      setTraining(false)
       
     } catch (error) {
       console.error('Training error:', error)
-      setError(error.message || 'Training failed. Please check your connection and try again.')
-      setIsTraining(false)
-      
-      // Show mock results as fallback (for demo)
-      setTrainingProgress(100)
-      setTrainingResults({
-        accuracy: 96.8,
-        loss: 0.032,
-        valAccuracy: 94.2,
-        valLoss: 0.045,
-        trainingTime: '2h 34m',
-        bestEpoch: 87,
-        modelSize: '45.2 MB'
-      })
+      setError(error.message || 'Failed to train model. Please check your data and try again.')
+      setTraining(false)
     }
   }
 
-  const optimizers = ['adam', 'sgd', 'rmsprop', 'adagrad']
-  const activations = ['relu', 'tanh', 'sigmoid', 'leaky_relu']
+  const downloadModel = async () => {
+    if (!trainingResults || !trainingResults.model_filename) return
+    
+    try {
+      const response = await fetch(`${API_ENDPOINTS.TRAIN}/download/${trainingResults.model_filename}`)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = trainingResults.model_filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Download error:', error)
+      setError('Failed to download model')
+    }
+  }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       {/* Page Header */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-          <span className="bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
-            Model Training Studio
-          </span>
+        <h1 className="text-4xl sm:text-5xl font-black mb-4 tracking-tight"
+            style={{
+              WebkitTextStroke: '2px black',
+              WebkitTextFillColor: 'transparent',
+              textStroke: '2px black'
+            }}>
+          RESOURCES & EDUCATION
         </h1>
-        <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-          Train custom exoplanet detection models with your own data and fine-tuned hyperparameters.
+        <p className="text-lg text-gray-700 max-w-3xl mx-auto font-medium">
+          Upload your training data and create a custom exoplanet detection model
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Data Upload Section */}
+        {/* Main Training Area */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Training Data Upload */}
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
-            <div className="flex items-center space-x-3 mb-6">
-              <Upload className="w-6 h-6 text-indigo-400" />
-              <h2 className="text-xl font-semibold">Training Data</h2>
+          {/* Training in Progress */}
+          {training && (
+            <div className="bg-white border-4 border-black rounded-none p-8">
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <Activity className="w-16 h-16 text-black animate-pulse" />
+                <div className="text-center">
+                  <h3 className="text-xl font-black mb-2 tracking-wider">TRAINING MODEL...</h3>
+                  <p className="text-gray-600 text-sm font-medium">AI is learning from your data. This may take a few minutes.</p>
+                </div>
+                <div className="w-full max-w-md">
+                  <div className="h-3 bg-gray-200 border-2 border-black overflow-hidden">
+                    <div className="h-full bg-black animate-[shimmer_2s_ease-in-out_infinite]"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-indigo-400/50 transition-all duration-300">
-              <input
-                type="file"
-                id="training-upload"
-                className="hidden"
-                accept=".csv,.fits,.txt,.h5"
-                onChange={(e) => handleFileUpload('training', e)}
-              />
-              <label htmlFor="training-upload" className="cursor-pointer">
-                <Upload className="w-12 h-12 mx-auto mb-4 text-indigo-400" />
-                <p className="text-base font-medium mb-2">
-                  {trainingData ? trainingData.name : 'Upload Training Dataset'}
-                </p>
-                <p className="text-sm text-gray-400">
-                  CSV, FITS, TXT, or HDF5 files (labeled light curves)
-                </p>
+          )}
+
+          {/* File Upload Section */}
+          <div className="bg-white border-4 border-black rounded-none p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <Upload className="w-6 h-6 text-black" />
+              <h2 className="text-xl font-black tracking-wide">UPLOAD TRAINING DATA</h2>
+            </div>
+
+            {/* Model Name Input */}
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-black mb-2">
+                Model Name
               </label>
+              <input
+                type="text"
+                value={modelName}
+                onChange={(e) => setModelName(e.target.value)}
+                placeholder="e.g., my-exoplanet-model-v1"
+                className="w-full px-4 py-2 bg-gray-50 border-2 border-black rounded-none text-black font-medium placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+              />
+            </div>
+
+            {/* File Upload Area */}
+            <div className="mb-6">
+              <label
+                htmlFor="training-upload"
+                className={`flex flex-col items-center justify-center w-full h-48 border-4 border-dashed rounded-none cursor-pointer transition-all duration-200 ${
+                  trainingFile
+                    ? 'border-black bg-green-50'
+                    : 'border-black bg-gray-50 hover:bg-gray-100'
+                }`}
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  {trainingFile ? (
+                    <>
+                      <CheckCircle className="w-12 h-12 text-black mb-3" />
+                      <p className="mb-2 text-sm text-black font-bold">
+                        {trainingFile.name}
+                      </p>
+                      <p className="text-xs text-gray-600 font-medium">
+                        {(trainingFile.size / 1024).toFixed(2)} KB
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="w-12 h-12 text-gray-600 mb-3" />
+                      <p className="mb-2 text-sm text-black font-medium">
+                        <span className="font-bold">Click to upload</span> or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-600 font-medium">
+                        CSV file with labeled training data
+                      </p>
+                    </>
+                  )}
+                </div>
+                <input
+                  id="training-upload"
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Required Columns Info */}
+            <div className="bg-blue-50 border-2 border-black rounded-none p-4">
+              <div className="flex items-start space-x-3">
+                <Info className="w-5 h-5 text-black mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-black">
+                  <p className="font-bold mb-2">Required CSV Columns (19 total):</p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                    {requiredColumns.map((col) => (
+                      <div key={col} className="bg-white px-2 py-1 rounded border border-black">
+                        <code className={col === 'koi_disposition' ? 'text-black font-extrabold' : 'font-medium'}>
+                          {col}
+                        </code>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-2 text-xs text-black">
+                    <strong>koi_disposition</strong> must contain "CONFIRMED" or "FALSE POSITIVE"
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Validation Data Upload */}
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+          {/* Hyperparameters Section */}
+          <div className="bg-white border-4 border-black rounded-none p-6">
             <div className="flex items-center space-x-3 mb-6">
-              <BarChart3 className="w-6 h-6 text-purple-400" />
-              <h2 className="text-xl font-semibold">Validation Data</h2>
-              <span className="text-sm text-gray-400">(Optional)</span>
+              <Settings className="w-6 h-6 text-black" />
+              <h2 className="text-xl font-black tracking-wide">MODEL CONFIGURATION</h2>
             </div>
-            
-            <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-purple-400/50 transition-all duration-300">
-              <input
-                type="file"
-                id="validation-upload"
-                className="hidden"
-                accept=".csv,.fits,.txt,.h5"
-                onChange={(e) => handleFileUpload('validation', e)}
-              />
-              <label htmlFor="validation-upload" className="cursor-pointer">
-                <BarChart3 className="w-12 h-12 mx-auto mb-4 text-purple-400" />
-                <p className="text-base font-medium mb-2">
-                  {validationData ? validationData.name : 'Upload Validation Dataset'}
+
+            <div className="space-y-6">
+              {/* Model Type */}
+              <div>
+                <label className="block text-sm font-bold text-black mb-2">
+                  Algorithm
+                </label>
+                <select
+                  value={hyperparameters.model_type}
+                  onChange={(e) => handleHyperparameterChange('model_type', e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-50 border-2 border-black rounded-none text-black font-medium focus:outline-none focus:ring-2 focus:ring-black"
+                >
+                  <option value="random_forest">Random Forest (Recommended)</option>
+                  <option value="lightgbm">LightGBM (Best Performance)</option>
+                  <option value="logistic_regression">Logistic Regression</option>
+                </select>
+              </div>
+
+              {/* Test Size */}
+              <div>
+                <label className="block text-sm font-bold text-black mb-2">
+                  Test Split Ratio: {(hyperparameters.test_size * 100).toFixed(0)}%
+                </label>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="0.4"
+                  step="0.05"
+                  value={hyperparameters.test_size}
+                  onChange={(e) => handleHyperparameterChange('test_size', parseFloat(e.target.value))}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-600 font-medium mt-1">
+                  Training: {(100 - hyperparameters.test_size * 100).toFixed(0)}% | Testing: {(hyperparameters.test_size * 100).toFixed(0)}%
                 </p>
-                <p className="text-sm text-gray-400">
-                  Separate dataset for model validation
-                </p>
-              </label>
+              </div>
+
+              {/* Random Forest Hyperparameters */}
+              {hyperparameters.model_type === 'random_forest' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-bold text-black mb-2">
+                      Number of Trees: {hyperparameters.n_estimators}
+                    </label>
+                    <input
+                      type="range"
+                      min="50"
+                      max="500"
+                      step="50"
+                      value={hyperparameters.n_estimators}
+                      onChange={(e) => handleHyperparameterChange('n_estimators', parseInt(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-black mb-2">
+                      Max Depth: {hyperparameters.max_depth === 100 ? 'None' : hyperparameters.max_depth}
+                    </label>
+                    <input
+                      type="range"
+                      min="10"
+                      max="100"
+                      step="10"
+                      value={hyperparameters.max_depth}
+                      onChange={(e) => handleHyperparameterChange('max_depth', parseInt(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-black mb-2">
+                      Class Weight
+                    </label>
+                    <select
+                      value={hyperparameters.class_weight}
+                      onChange={(e) => handleHyperparameterChange('class_weight', e.target.value)}
+                      className="w-full px-4 py-2 bg-gray-50 border-2 border-black rounded-none text-black font-medium focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                      <option value="balanced">Balanced (Handle imbalanced data)</option>
+                      <option value="None">None</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {/* LightGBM Hyperparameters */}
+              {hyperparameters.model_type === 'lightgbm' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-bold text-black mb-2">
+                      Learning Rate: {hyperparameters.learning_rate}
+                    </label>
+                    <input
+                      type="range"
+                      min="0.01"
+                      max="0.3"
+                      step="0.01"
+                      value={hyperparameters.learning_rate}
+                      onChange={(e) => handleHyperparameterChange('learning_rate', parseFloat(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-black mb-2">
+                      Number of Leaves: {hyperparameters.num_leaves}
+                    </label>
+                    <input
+                      type="range"
+                      min="20"
+                      max="100"
+                      step="10"
+                      value={hyperparameters.num_leaves}
+                      onChange={(e) => handleHyperparameterChange('num_leaves', parseInt(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+            <div className="bg-red-50 border-4 border-red-600 rounded-none p-4">
               <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-red-300">
-                  <p className="font-medium mb-1">Training Error</p>
-                  <p>{error}</p>
+                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-red-800">
+                  <p className="font-bold mb-1">ERROR</p>
+                  <p className="font-medium">{error}</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Training Progress */}
-          {isTraining && (
-            <div className="bg-gradient-to-r from-indigo-900/30 to-purple-900/30 backdrop-blur-md border border-indigo-500/30 rounded-2xl p-6">
-              {/* Animated Planet while training */}
-              <div className="flex justify-center mb-6">
-                <AnimatedPlanet size="medium" variant="secondary" />
-              </div>
-              
-              <div className="flex items-center justify-center space-x-3 mb-4">
-                <RefreshCw className="w-6 h-6 text-indigo-400 animate-spin" />
-                <h3 className="text-xl font-semibold">Training in Progress</h3>
-              </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span>Progress</span>
-                    <span>{trainingProgress}%</span>
-                  </div>
-                  <div className="w-full bg-white/10 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-300"
-                      style={{ width: `${trainingProgress}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-400">Current Epoch:</span>
-                    <span className="ml-2 font-semibold">{Math.floor(trainingProgress * hyperparameters.epochs / 100)}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Estimated Time:</span>
-                    <span className="ml-2 font-semibold">{Math.max(1, Math.floor((100 - trainingProgress) * 2))}m</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Training Results */}
-          {trainingResults && (
-            <div className="bg-gradient-to-r from-green-900/30 to-blue-900/30 backdrop-blur-md border border-green-500/30 rounded-2xl p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <Brain className="w-6 h-6 text-green-400" />
-                <h3 className="text-xl font-semibold">Training Complete!</h3>
-              </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white/5 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-green-400">{trainingResults.accuracy}%</p>
-                  <p className="text-sm text-gray-400">Accuracy</p>
-                </div>
-                <div className="bg-white/5 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-blue-400">{trainingResults.valAccuracy}%</p>
-                  <p className="text-sm text-gray-400">Val Accuracy</p>
-                </div>
-                <div className="bg-white/5 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-purple-400">{trainingResults.loss}</p>
-                  <p className="text-sm text-gray-400">Loss</p>
-                </div>
-                <div className="bg-white/5 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-indigo-400">{trainingResults.trainingTime}</p>
-                  <p className="text-sm text-gray-400">Time</p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2">
-                  <Download className="w-4 h-4" />
-                  <span>Download Model</span>
-                </button>
-                <button className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2">
-                  <Save className="w-4 h-4" />
-                  <span>Save to Library</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Hyperparameters Panel */}
-        <div className="space-y-6">
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
-            <div className="flex items-center space-x-3 mb-6">
-              <Settings className="w-6 h-6 text-yellow-400" />
-              <h2 className="text-xl font-semibold">Hyperparameters</h2>
-            </div>
-            
-            <div className="space-y-4">
-              {/* Learning Rate */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Learning Rate
-                </label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  value={hyperparameters.learningRate}
-                  onChange={(e) => handleHyperparameterChange('learningRate', parseFloat(e.target.value))}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              {/* Batch Size */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Batch Size
-                </label>
-                <select
-                  value={hyperparameters.batchSize}
-                  onChange={(e) => handleHyperparameterChange('batchSize', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  <option value={16}>16</option>
-                  <option value={32}>32</option>
-                  <option value={64}>64</option>
-                  <option value={128}>128</option>
-                </select>
-              </div>
-
-              {/* Epochs */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Epochs
-                </label>
-                <input
-                  type="number"
-                  value={hyperparameters.epochs}
-                  onChange={(e) => handleHyperparameterChange('epochs', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              {/* Hidden Layers */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Hidden Layers
-                </label>
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={hyperparameters.hiddenLayers}
-                  onChange={(e) => handleHyperparameterChange('hiddenLayers', parseInt(e.target.value))}
-                  className="w-full"
-                />
-                <div className="text-center text-sm text-gray-400 mt-1">
-                  {hyperparameters.hiddenLayers} layers
-                </div>
-              </div>
-
-              {/* Neurons per Layer */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Neurons per Layer
-                </label>
-                <select
-                  value={hyperparameters.neuronsPerLayer}
-                  onChange={(e) => handleHyperparameterChange('neuronsPerLayer', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  <option value={64}>64</option>
-                  <option value={128}>128</option>
-                  <option value={256}>256</option>
-                  <option value={512}>512</option>
-                </select>
-              </div>
-
-              {/* Dropout */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Dropout Rate
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="0.5"
-                  step="0.1"
-                  value={hyperparameters.dropout}
-                  onChange={(e) => handleHyperparameterChange('dropout', parseFloat(e.target.value))}
-                  className="w-full"
-                />
-                <div className="text-center text-sm text-gray-400 mt-1">
-                  {hyperparameters.dropout}
-                </div>
-              </div>
-
-              {/* Optimizer */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Optimizer
-                </label>
-                <select
-                  value={hyperparameters.optimizer}
-                  onChange={(e) => handleHyperparameterChange('optimizer', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  {optimizers.map(opt => (
-                    <option key={opt} value={opt}>{opt.toUpperCase()}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Activation */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Activation Function
-                </label>
-                <select
-                  value={hyperparameters.activation}
-                  onChange={(e) => handleHyperparameterChange('activation', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  {activations.map(act => (
-                    <option key={act} value={act}>{act.replace('_', ' ').toUpperCase()}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Start Training Button */}
+          {/* Train Button */}
           <button
-            onClick={startTraining}
-            disabled={!trainingData || isTraining}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-indigo-500/50"
+            onClick={handleTrainModel}
+            disabled={training || !trainingFile}
+            className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-none border-4 border-black flex items-center justify-center space-x-2 transition-all duration-200"
           >
-            {isTraining ? (
+            {training ? (
               <>
-                <RefreshCw className="w-5 h-5 animate-spin" />
-                <span>Training...</span>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                <span>TRAINING...</span>
               </>
             ) : (
               <>
-                <Play className="w-5 h-5" />
-                <span>Start Training</span>
+                <Zap className="w-5 h-5" />
+                <span>START TRAINING</span>
               </>
             )}
           </button>
 
-          {/* Info Panel */}
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+          {/* Training Results */}
+          {trainingResults && (
+            <div className="bg-green-50 border-4 border-black rounded-none p-6">
+              <div className="flex items-center space-x-3 mb-6">
+                <CheckCircle className="w-6 h-6 text-black" />
+                <h3 className="text-xl font-black tracking-wider">TRAINING COMPLETE!</h3>
+              </div>
+
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-white border-2 border-black rounded-none p-4 text-center">
+                  <p className="text-sm text-gray-600 font-bold mb-1">Training Accuracy</p>
+                  <p className="text-2xl font-black text-black">{trainingResults.train_accuracy}%</p>
+                </div>
+                <div className="bg-white border-2 border-black rounded-none p-4 text-center">
+                  <p className="text-sm text-gray-600 font-bold mb-1">Test Accuracy</p>
+                  <p className="text-2xl font-black text-black">{trainingResults.test_accuracy}%</p>
+                </div>
+                <div className="bg-white border-2 border-black rounded-none p-4 text-center">
+                  <p className="text-sm text-gray-600 font-bold mb-1">Precision</p>
+                  <p className="text-2xl font-black text-black">{trainingResults.precision}%</p>
+                </div>
+                <div className="bg-white border-2 border-black rounded-none p-4 text-center">
+                  <p className="text-sm text-gray-600 font-bold mb-1">Recall</p>
+                  <p className="text-2xl font-black text-black">{trainingResults.recall}%</p>
+                </div>
+              </div>
+
+              {/* Classification Report */}
+              <div className="bg-white border-2 border-black rounded-none p-4 mb-6">
+                <h4 className="font-black mb-3 flex items-center space-x-2">
+                  <BarChart3 className="w-5 h-5 text-black" />
+                  <span>CLASSIFICATION REPORT</span>
+                </h4>
+                <pre className="text-xs bg-gray-100 border-2 border-black p-3 rounded-none overflow-x-auto font-mono">
+                  {trainingResults.classification_report}
+                </pre>
+              </div>
+
+              {/* Training Info */}
+              <div className="bg-white border-2 border-black rounded-none p-4 mb-6">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-600 font-bold">Model Type:</span>
+                    <p className="font-black text-black">{trainingResults.model_type}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 font-bold">Training Time:</span>
+                    <p className="font-black text-black">{trainingResults.training_time}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 font-bold">Training Samples:</span>
+                    <p className="font-black text-black">{trainingResults.train_samples}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 font-bold">Test Samples:</span>
+                    <p className="font-black text-black">{trainingResults.test_samples}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Download Button */}
+              <button
+                onClick={downloadModel}
+                className="w-full bg-black hover:bg-gray-800 border-4 border-black text-white font-bold py-3 px-6 rounded-none flex items-center justify-center space-x-2 transition-all duration-200"
+              >
+                <Download className="w-5 h-5" />
+                <span>DOWNLOAD TRAINED MODEL</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Info Panel */}
+        <div className="space-y-6">
+          {/* Training Steps */}
+          <div className="bg-white border-4 border-black rounded-none p-6">
+            <h3 className="text-lg font-black mb-4 tracking-wide">TRAINING STEPS</h3>
+            <ol className="space-y-3 text-sm">
+              <li className="flex items-start space-x-3">
+                <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+                <span className="text-gray-700 font-medium">Upload CSV with training data (must include target column)</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+                <span className="text-gray-700 font-medium">Choose algorithm and configure hyperparameters</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+                <span className="text-gray-700 font-medium">Data is automatically split (default: 80% train, 20% test)</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">4</span>
+                <span className="text-gray-700 font-medium">Model is trained and evaluated</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">5</span>
+                <span className="text-gray-700 font-medium">Download trained model for predictions</span>
+              </li>
+            </ol>
+          </div>
+
+          {/* Algorithm Info */}
+          <div className="bg-white border-4 border-black rounded-none p-6">
+            <h3 className="text-lg font-black mb-4 tracking-wide">ALGORITHMS</h3>
+            <div className="space-y-4 text-sm">
+              <div>
+                <h4 className="font-black text-black mb-1">Random Forest</h4>
+                <p className="text-gray-700 text-xs font-medium">Ensemble learning, robust, ~96% accuracy. Best for balanced data.</p>
+              </div>
+              <div>
+                <h4 className="font-black text-black mb-1">LightGBM</h4>
+                <p className="text-gray-700 text-xs font-medium">Gradient boosting, fastest, ~96-98% accuracy. Best overall performance.</p>
+              </div>
+              <div>
+                <h4 className="font-black text-black mb-1">Logistic Regression</h4>
+                <p className="text-gray-700 text-xs font-medium">Linear model, fast, ~91% accuracy. Good baseline model.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Tips */}
+          <div className="bg-blue-50 border-2 border-black rounded-none p-4">
             <div className="flex items-start space-x-3">
-              <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-blue-300">
-                <p className="font-medium mb-1">Training Tips:</p>
-                <ul className="space-y-1 text-xs">
-                  <li>• Start with default parameters</li>
-                  <li>• Use validation data for better results</li>
-                  <li>• Monitor for overfitting</li>
-                  <li>• Larger datasets need more epochs</li>
+              <Info className="w-5 h-5 text-black mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-black">
+                <p className="font-bold mb-1">TIPS:</p>
+                <ul className="space-y-1 text-xs font-medium">
+                  <li>• Use at least 1000 rows for good results</li>
+                  <li>• Ensure balanced classes (CONFIRMED vs FALSE POSITIVE)</li>
+                  <li>• Remove rows with null values before upload</li>
+                  <li>• LightGBM performs best on this dataset</li>
                 </ul>
               </div>
             </div>
