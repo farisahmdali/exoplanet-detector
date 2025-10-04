@@ -8,8 +8,8 @@ function Layout() {
     { name: 'Home', href: '/', icon: Home },
     { name: 'Predict', href: '/predict', icon: Zap },
     { name: 'Training', href: '/training', icon: Brain },
-    { name: 'Database', href: '/database', icon: Database },
-    { name: 'About', href: '/about', icon: Info },
+    // { name: 'Database', href: '/database', icon: Database },
+    // { name: 'About', href: '/about', icon: Info },
   ]
 
   const isActive = (path) => {
@@ -31,7 +31,7 @@ function Layout() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 border-b border-white/10 backdrop-blur-sm">
+      <header className="relative z-[999] border-b border-white/10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-6">
             {/* Logo */}
@@ -63,11 +63,7 @@ function Layout() {
               ))}
             </nav>
 
-            {/* Status */}
-            <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-400">
-              <Activity className="w-4 h-4 text-green-400" />
-              <span>System Online</span>
-            </div>
+            
           </div>
 
           {/* Mobile Navigation */}
