@@ -97,34 +97,8 @@ function Predict() {
     {
       id: 'kepler-v2',
       name: 'Kepler Transit Model v2.0',
-      description: 'Trained on 150K+ Kepler light curves',
       accuracy: '96.8%',
       size: '45.2 MB',
-      specialty: 'General exoplanet detection'
-    },
-    {
-      id: 'tess-optimized',
-      name: 'TESS Optimized Model',
-      description: 'Specialized for TESS mission data',
-      accuracy: '94.5%',
-      size: '38.7 MB',
-      specialty: 'TESS data analysis'
-    },
-    {
-      id: 'habitable-zone',
-      name: 'Habitable Zone Detector',
-      description: 'Focuses on potentially habitable planets',
-      accuracy: '92.1%',
-      size: '52.3 MB',
-      specialty: 'Habitable zone candidates'
-    },
-    {
-      id: 'multi-planet',
-      name: 'Multi-Planet System Model',
-      description: 'Detects multiple planets in single system',
-      accuracy: '89.7%',
-      size: '67.8 MB',
-      specialty: 'Multi-planet systems'
     }
   ]
 
