@@ -8,7 +8,7 @@ function Home() {
   const [scrollY, setScrollY] = useState(0)
   const [fetchData, setFetchData] = useState({star : 0})
   const [latestDiscovery, setLatestDiscovery] = useState(null)
-  const [expandedCard, setExpandedCard] = useState(null)
+  // const [expandedCard, setExpandedCard] = useState(null)
   const [expandedInfoCard, setExpandedInfoCard] = useState(null)
 
   // Detailed content for each exoplanet type
@@ -41,20 +41,6 @@ function Home() {
         diversity: "Show incredible variety in composition, from rocky worlds to mini-Neptunes with thick atmospheres"
       }
     },
-    hotJupiters: {
-      title: "Hot Jupiters",
-      color: "yellow",
-      description: "Gas giants orbiting extremely close to their stars with scorching temperatures exceeding 1000°C.",
-      detailedContent: {
-        composition: "Similar to Jupiter but with atmospheres stripped and modified by intense stellar radiation",
-        size: "Similar to Jupiter but often inflated due to extreme heat, making them larger than expected",
-        characteristics: "Extremely short orbital periods (1-10 days), tidally locked, with day-side temperatures over 1000°C",
-        examples: "HD 209458 b (Osiris), WASP-12b, and 51 Pegasi b (the first exoplanet discovered around a Sun-like star)",
-        discovery: "Easily detected due to their large size and frequent transits, revolutionizing exoplanet science",
-        atmosphere: "Atmospheres being stripped away by stellar winds, creating comet-like tails",
-        formation: "Likely formed far from their stars and migrated inward, challenging our understanding of planetary formation"
-      }
-    },
     iceGiants: {
       title: "Ice Giants",
       color: "orange",
@@ -67,6 +53,20 @@ function Home() {
         discovery: "Challenging to detect due to their distance from host stars and smaller transit signals",
         atmosphere: "Rich in water vapor, methane, and other volatiles, with complex weather patterns",
         oceans: "May harbor subsurface oceans beneath thick ice layers, potentially habitable environments"
+      }
+    },
+    terrestrial: {
+      title: "Terrestrial",
+      color: "blue",
+      description: "Rocky planets similar to Earth, with solid surfaces and potentially habitable conditions.",
+      detailedContent: {
+        composition: "Rocky surfaces composed of silicate minerals, metals, and potentially water",
+        size: "Similar to Earth's mass and size, ranging from 0.5-2 times Earth's radius",
+        characteristics: "Solid surfaces, potential atmospheres, and may have plate tectonics and magnetic fields",
+        examples: "Earth, Mars, and Venus in our solar system, with exoplanets like Kepler-438b and TRAPPIST-1e",
+        discovery: "Difficult to detect due to their small size, often found using the transit method",
+        habitability: "Located in habitable zones where liquid water could exist on the surface",
+        atmosphere: "May have atmospheres ranging from thin (like Mars) to thick (like Venus) or Earth-like"
       }
     }
   }
@@ -134,9 +134,7 @@ function Home() {
     }
   }
 
-  const handleCardClick = (cardType) => {
-    setExpandedCard(expandedCard === cardType ? null : cardType)
-  }
+  
 
   const handleInfoCardClick = (cardType) => {
     setExpandedInfoCard(expandedInfoCard === cardType ? null : cardType)
@@ -231,12 +229,12 @@ function Home() {
           className="relative z-10 text-center px-4"
           style={{ opacity: heroOpacity }}
         >
-          <h1 className="text-white font-orbitron text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight  mx-auto">
+          <h1 className="text-white  mt-15 font-orbitron text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight  mx-auto">
             Journey Beyond Our Solar System
           </h1>
-            <p className="text-white text-xl md:text-2xl mb-12 font-light max-w-4xl mx-auto">
-            Embark on an extraordinary journey through the cosmos to discover distant worlds beyond our solar system. Using cutting-edge machine learning models, explore thousands of exoplanets orbiting alien stars, each holding secrets about planetary formation, atmospheric composition, and the tantalizing possibility of extraterrestrial life in our vast universe.
-          </p>
+              {/* <p className="text-white  text-[15px] pt-16 md:text-2xl mb-12 font-light max-w-4xl mx-auto">
+              Experience the wonder of exoplanet discovery as you traverse uncharted cosmic realms, unveiling breathtaking alien landscapes, uncovering mysterious atmospheric compositions, witnessing extraordinary celestial phenomena, and igniting a profound and limitless curiosity that fuels scientific exploration, inspires technological innovation, and unites collective humanity in awe of the universe’s boundless infinite majesty.
+            </p> */}
          
         </div>
       </div>
@@ -785,164 +783,98 @@ function Home() {
       <div className="space-y-8">
         {/* Gas Giants Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer ${
-            expandedCard === 'gasGiants' ? 'fixed inset-4 z-50 bg-black/95 backdrop-blur-xl border-white/50' : ''
-          }`}
-          onClick={() => handleCardClick('gasGiants')}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
         >
-          <div className={`flex items-center gap-8 ${expandedCard === 'gasGiants' ? 'flex-col text-center' : ''}`}>
-            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 ${expandedCard === 'gasGiants' ? 'w-48 h-48' : ''}`}>
+          <div className={`flex items-center gap-8 `}>
+            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
               <img 
                 src="/gasgiant.jpeg" 
                 alt="Gas Giant Exoplanet" 
-                className="w-full h-full object-cover rounded-full"
+                className="w-full h-full object-cover rounded-full object-left"
               />
             </div>
-            <div className={`flex-1 ${expandedCard === 'gasGiants' ? 'max-w-4xl' : ''}`}>
+            <div className={`flex-1 `}>
             <h3 className="text-3xl font-bold mb-4 text-white">Gas Giants</h3>
             <p className="text-gray-300 text-xl leading-relaxed">
                 {exoplanetTypes.gasGiants.description}
               </p>
-              {expandedCard === 'gasGiants' && (
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                  {Object.entries(exoplanetTypes.gasGiants.detailedContent).map(([key, value]) => (
-                    <div key={key} className="bg-black/40 rounded-lg p-4 border border-white/20">
-                      <h4 className="text-white font-semibold mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                      <p className="text-gray-300 text-sm">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              
             </div>
           </div>
-          {expandedCard === 'gasGiants' && (
-            <button 
-              onClick={(e) => {
-                e.stopPropagation()
-                setExpandedCard(null)
-              }}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl font-bold bg-black/50 rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              ×
-            </button>
-          )}
+          
         </div>
 
         {/* Super-Earths Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer ${
-            expandedCard === 'superEarths' ? 'fixed inset-4 z-50 bg-black/95 backdrop-blur-xl border-white/50' : ''
-          }`}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
           onClick={() => handleCardClick('superEarths')}
         >
-          <div className={`flex items-center gap-8 ${expandedCard === 'superEarths' ? 'flex-col text-center' : ''}`}>
-            <div className={`flex-1 ${expandedCard === 'superEarths' ? 'max-w-4xl order-2' : 'text-right'}`}>
+          <div className={`flex items-center gap-8`}>
+            <div className={`flex-1 `}>
             <h3 className="text-3xl font-bold mb-4 text-white">Super-Earths</h3>
             <p className="text-gray-300 text-xl leading-relaxed">
                 {exoplanetTypes.superEarths.description}
               </p>
-              {expandedCard === 'superEarths' && (
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                  {Object.entries(exoplanetTypes.superEarths.detailedContent).map(([key, value]) => (
-                    <div key={key} className="bg-green-900/20 rounded-lg p-4">
-                      <h4 className="text-green-200 font-semibold mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                      <p className="text-gray-300 text-sm">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              
             </div>
-            <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 shadow-2xl flex-shrink-0 ${expandedCard === 'superEarths' ? 'w-48 h-48 order-1' : ''}`}></div>
+            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+              <img 
+                src="/superearth.jpeg" 
+                alt="Super-Earth Exoplanet" 
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
           </div>
-          {expandedCard === 'superEarths' && (
-            <button 
-              onClick={(e) => {
-                e.stopPropagation()
-                setExpandedCard(null)
-              }}
-              className="absolute top-4 right-4 text-green-300 hover:text-green-200 text-2xl font-bold bg-green-900/50 rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              ×
-            </button>
-          )}
+          
         </div>
 
-        {/* Hot Jupiters Card */}
-        <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer ${
-            expandedCard === 'hotJupiters' ? 'fixed inset-4 z-50 bg-black/95 backdrop-blur-xl border-white/50' : ''
-          }`}
-          onClick={() => handleCardClick('hotJupiters')}
-        >
-          <div className={`flex items-center gap-8 ${expandedCard === 'hotJupiters' ? 'flex-col text-center' : ''}`}>
-            <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 shadow-2xl flex-shrink-0 animate-pulse ${expandedCard === 'hotJupiters' ? 'w-48 h-48' : ''}`}></div>
-            <div className={`flex-1 ${expandedCard === 'hotJupiters' ? 'max-w-4xl' : ''}`}>
-            <h3 className="text-3xl font-bold mb-4 text-white">Hot Jupiters</h3>
-            <p className="text-gray-300 text-xl leading-relaxed">
-                {exoplanetTypes.hotJupiters.description}
-              </p>
-              {expandedCard === 'hotJupiters' && (
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                  {Object.entries(exoplanetTypes.hotJupiters.detailedContent).map(([key, value]) => (
-                    <div key={key} className="bg-black/40 rounded-lg p-4 border border-white/20">
-                      <h4 className="text-white font-semibold mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                      <p className="text-gray-300 text-sm">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          {expandedCard === 'hotJupiters' && (
-            <button 
-              onClick={(e) => {
-                e.stopPropagation()
-                setExpandedCard(null)
-              }}
-              className="absolute top-4 right-4 text-yellow-300 hover:text-yellow-200 text-2xl font-bold bg-yellow-900/50 rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              ×
-            </button>
-          )}
-        </div>
 
         {/* Ice Giants Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer ${
-            expandedCard === 'iceGiants' ? 'fixed inset-4 z-50 bg-black/95 backdrop-blur-xl border-white/50' : ''
-          }`}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
           onClick={() => handleCardClick('iceGiants')}
         >
-          <div className={`flex items-center gap-8 ${expandedCard === 'iceGiants' ? 'flex-col text-center' : ''}`}>
-            <div className={`flex-1 ${expandedCard === 'iceGiants' ? 'max-w-4xl order-2' : 'text-right'}`}>
+          <div className={`flex items-center gap-8 `}>
+            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+              <img 
+                src="/neptunelike.jpeg" 
+                alt="Ice Giant Exoplanet" 
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+            <div className={`flex-1 `}>
               <h3 className="text-3xl font-bold mb-4 text-white">Ice Giants</h3>
             <p className="text-gray-300 text-xl leading-relaxed">
                 {exoplanetTypes.iceGiants.description}
               </p>
-              {expandedCard === 'iceGiants' && (
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                  {Object.entries(exoplanetTypes.iceGiants.detailedContent).map(([key, value]) => (
-                    <div key={key} className="bg-black/40 rounded-lg p-4 border border-white/20">
-                      <h4 className="text-white font-semibold mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                      <p className="text-gray-300 text-sm">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+             
             </div>
-            <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-orange-400 to-blue-500 shadow-2xl flex-shrink-0 ${expandedCard === 'iceGiants' ? 'w-48 h-48 order-1' : ''}`}></div>
           </div>
-          {expandedCard === 'iceGiants' && (
-            <button 
-              onClick={(e) => {
-                e.stopPropagation()
-                setExpandedCard(null)
-              }}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl font-bold bg-black/50 rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              ×
-            </button>
-          )}
+          
+        </div>
+
+        {/* Terrestrial Card */}
+        <div 
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
+          onClick={() => handleCardClick('terrestrial')}
+        >
+          <div className={`flex items-center gap-8 `}>
+            <div className={`flex-1 `}>
+              <h3 className="text-3xl font-bold mb-4 text-white">Terrestrial</h3>
+              <p className="text-gray-300 text-xl leading-relaxed">
+                {exoplanetTypes.terrestrial.description}
+              </p>
+              
+            </div>
+            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+              <img 
+                src="/terrential.jpeg" 
+                alt="Terrestrial Exoplanet" 
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
