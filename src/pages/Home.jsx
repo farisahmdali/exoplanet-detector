@@ -783,9 +783,7 @@ function Home() {
             Types of Exoplanets
           </span>
         </h2>
-        <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-3xl mx-auto px-2">
-          Click on any exoplanet type to explore detailed information about these fascinating worlds beyond our solar system.
-        </p>
+        
       </div>
 
       <div className="space-y-4 md:space-y-6 lg:space-y-8">

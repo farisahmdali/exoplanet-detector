@@ -966,7 +966,7 @@ function Predict() {
           </div>
 
           {/* Pro Tips */}
-          <div className="bg-neon-blue/10 border border-neon-blue/30 rounded-xl p-4">
+          {/* <div className="bg-neon-blue/10 border border-neon-blue/30 rounded-xl p-4">
             <div className="flex items-start space-x-3">
               <Sparkles className="w-5 h-5 text-neon-blue mt-0.5 flex-shrink-0" />
               <div className="text-sm text-neon-blue">
@@ -979,7 +979,7 @@ function Predict() {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
           </div>
         </div> {/* End grid */}
 

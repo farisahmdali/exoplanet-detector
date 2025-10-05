@@ -31,6 +31,14 @@ function Layout() {
       <main className="relative">
         <Outlet />
       </main>
+      <footer className="absolute left-0 right-0 z-10 py-4 px-8 bg-black/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-white/80 text-sm flex justify-center items-center font-medium text-center">
+            Powered by  <img src="./uwr.png" alt="" className='w-24 h-24' />
+          </p>
+        </div>
+      </footer>
+
     </div>
   )
 }
