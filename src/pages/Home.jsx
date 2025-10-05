@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import bgImage from '../assets/bg.png'
 import SpinningSphere from '../components/SpinningSphere'
@@ -8,6 +8,7 @@ function Home() {
   const [scrollY, setScrollY] = useState(0)
   const [fetchData, setFetchData] = useState({star : 0})
   const [latestDiscovery, setLatestDiscovery] = useState(null)
+  const navigate = useNavigate()
   // const [expandedCard, setExpandedCard] = useState(null)
   const [expandedInfoCard, setExpandedInfoCard] = useState(null)
 
@@ -695,7 +696,7 @@ function Home() {
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
         {/* Predict Exoplanets Card */}
         <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
-               onClick={() => window.location.href = '/predict'}>
+               onClick={() => navigate('/predict')}>
           <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
             <svg className="w-8 h-8 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M9 19c-5 0-8-3-8-8s3-8 8-8 8 3 8 8-3 8-8 8z"/>
@@ -708,7 +709,7 @@ function Home() {
 
         {/* Train a Model Card */}
         <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
-             onClick={() => window.location.href = '/training'}>
+             onClick={() => navigate('/training')}>
           <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
             <svg className="w-8 h-8 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -722,7 +723,7 @@ function Home() {
         
         {/* Exoplanet Game Card */}
         <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
-               onClick={() => window.location.href = '/game'}>
+               onClick={() => navigate('/game')}>
           <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
             <svg className="w-8 h-8 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
