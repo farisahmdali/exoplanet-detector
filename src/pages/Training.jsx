@@ -126,14 +126,14 @@ function Training() {
   }
 
   return (
-    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 ">
       {/* Animated Star Field Background */}
       <div className="fixed inset-0 -z-10">
         <StarField density={150} speed={0.3} />
       </div>
 
       {/* Page Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-6 mt-20">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">
           <span className="bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent">
             Training Lab

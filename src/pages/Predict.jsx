@@ -333,7 +333,7 @@ function Predict() {
   }
 
   return (
-    <div className="section-padding">
+    <div className="section-padding" onClick={(e) => setShowResultsModal(null)}>
       <div className="max-w-7xl mx-auto container-padding">
         
         {/* Page Header - Minimalist */}
@@ -916,7 +916,7 @@ function Predict() {
           </div>
 
           {/* Model Performance Stats */}
-          <div className="card-dark">
+          {/* <div className="card-dark">
             <h3 className="heading-tertiary mb-4">MODEL PERFORMANCE</h3>
             <div className="space-y-3">
               <div className="flex justify-between">
@@ -926,7 +926,7 @@ function Predict() {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Feature Importance Analysis - Desktop Only */}
           <div className="hidden xl:block card-dark overflow-hidden">
@@ -1245,7 +1245,7 @@ function Predict() {
 
               {/* Complete CSV Results Table */}
               {mode === 'csv' && allPredictions && allPredictions.length > 0 && (
-                <div className="mb-8">
+                <div className="mb-8" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold text-white flex items-center space-x-2">
                       <Table className="w-6 h-6 text-indigo-400" />
@@ -1320,7 +1320,7 @@ function Predict() {
 
                   {/* Table Summary */}
                   <div className="mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center text-sm">
                       <div>
                         <p className="text-gray-400 mb-1">Total Rows</p>
                         <p className="text-2xl font-bold text-white">{allPredictions.length}</p>
@@ -1337,12 +1337,12 @@ function Predict() {
                           {allPredictions.filter(p => p.prediction === 'FALSE POSITIVE').length}
                         </p>
                       </div>
-                      <div>
+                      {/* <div>
                         <p className="text-gray-400 mb-1">Success Rate</p>
                         <p className="text-2xl font-bold text-indigo-400">
                           {((allPredictions.filter(p => p.prediction === 'CONFIRMED').length / allPredictions.length) * 100).toFixed(1)}%
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
