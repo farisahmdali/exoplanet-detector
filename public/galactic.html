@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galactic Explorer VR - Educational Space Game</title>
+    <title>Exoplanet Hunter - Educational Space Game</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -780,10 +780,42 @@
             font-size: 24px;
             color: #00ffff;
         }
+        /* Back Button */
+        #back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #FC3D21 0%, #0B3D91 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 4000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(252, 61, 33, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(252, 61, 33, 0.5);
+            background: linear-gradient(135deg, #FF4A2B 0%, #0C4AA3 100%);
+        }
+
+        #back-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(252, 61, 33, 0.4);
+        }
     </style>
 </head>
 <body>
-    <div id="loading">Loading Galactic Explorer VR...</div>
+    <button id="back-btn" onclick="window.location.href='/'">Back</button>
+    <div id="loading">Loading Exoplanet Hunter...</div>
     <canvas id="gameCanvas"></canvas>
     
     <div id="ui-overlay">
@@ -792,7 +824,7 @@
             <div style="background: rgba(252, 61, 33, 0.1); padding: 8px 24px; border-radius: 50px; border: 2px solid rgba(252, 61, 33, 0.3); margin-bottom: 24px;">
                 <p style="color: #FC3D21; font-weight: 700; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;">Space Education Initiative</p>
             </div>
-            <h1 class="game-title">GALACTIC EXPLORER VR</h1>
+            <h1 class="game-title">Exoplanet Hunter</h1>
             <p class="game-subtitle">Educational Space Exploration Game</p>
             <div class="menu-buttons">
                 <button class="menu-btn" onclick="showLevelSelect()">Start Mission</button>

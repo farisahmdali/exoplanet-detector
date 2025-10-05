@@ -190,19 +190,19 @@ function Home() {
       <div className="fixed top-0 left-0 w-full h-full bg-black/40 z-1"></div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-20 py-8 px-8 bg-black/20 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto flex justify-center items-center gap-16">
-          <Link to="/" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
+      <nav className="fixed top-0 left-0 right-0 z-20 py-4 md:py-8 px-4 md:px-8 bg-black/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto flex justify-center items-center gap-4 md:gap-8 lg:gap-16">
+          <Link to="/" className="text-white text-sm md:text-lg lg:text-xl font-bold hover:opacity-80 transition-opacity">
             Home
           </Link>
-          <Link to="/predict" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
+          <Link to="/predict" className="text-white text-sm md:text-lg lg:text-xl font-bold hover:opacity-80 transition-opacity">
             Predict
           </Link>
          
-          <Link to="/training" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
+          <Link to="/training" className="text-white text-sm md:text-lg lg:text-xl font-bold hover:opacity-80 transition-opacity">
             Training
           </Link>
-          <a href="/galactic.html" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
+          <a href="/galactic.html" className="text-white text-sm md:text-lg lg:text-xl font-bold hover:opacity-80 transition-opacity">
             Game
           </a>
         </div>
@@ -212,6 +212,7 @@ function Home() {
       <div className="min-h-screen flex items-center justify-center relative z-10">
         {/* 3D Spinning Sphere with Parallax Effect */}
         <div 
+          className="hidden md:block"
           style={{
             position: 'absolute',
             left: `${leftPosition}%`,
@@ -226,29 +227,29 @@ function Home() {
 
         {/* Hero Content - Fades out on scroll */}
         <div 
-          className="relative z-10 text-center px-4"
+          className="relative z-10 text-center px-4 md:px-8"
           style={{ opacity: heroOpacity }}
         >
-          <h1 className="text-white  mt-15 font-orbitron text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight  mx-auto">
+          <h1 className="text-white mt-20 md:mt-15 font-orbitron text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase mb-4 md:mb-6 tracking-tight leading-tight mx-auto">
             Journey Beyond Our Solar System
           </h1>
-              <p className="text-white  text-[15px]  md:text-2xl mb-12 font-light max-w-4xl mx-auto">
-              Experience the wonder of exoplanet discovery as you traverse uncharted cosmic realms, unveiling breathtaking alien landscapes, uncovering mysterious atmospheric compositions, witnessing extraordinary celestial phenomena, and igniting a profound and limitless curiosity that fuels scientific exploration, inspires technological innovation, and unites collective humanity in awe of the universe’s boundless infinite majesty.
+              <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-8 md:mb-12 font-light max-w-4xl mx-auto px-2">
+              Experience the wonder of exoplanet discovery as you traverse uncharted cosmic realms, unveiling breathtaking alien landscapes, uncovering mysterious atmospheric compositions, witnessing extraordinary celestial phenomena, and igniting a profound and limitless curiosity that fuels scientific exploration, inspires technological innovation, and unites collective humanity in awe of the universe's boundless infinite majesty.
             </p>
          
         </div>
       </div>
 
       {/* Exoplanet Section - Fades in on scroll */}
-      <div className="min-h-screen flex items-center justify-end px-8 md:px-16 lg:px-32 relative z-10">
+      <div className="min-h-screen flex items-center justify-center md:justify-end px-4 md:px-8 lg:px-16 xl:px-32 relative z-10">
         <div 
-          className="flex flex-col items-center justify-center text-white z-10 w-full max-w-2xl md:items-end md:text-right"
+          className="flex flex-col items-center justify-center text-white z-10 w-full max-w-2xl text-center md:items-end md:text-right"
           style={{ opacity: exoplanetOpacity }}
         >
-          <h2 className="text-5xl font-orbitron text-center md:text-6xl lg:text-7xl font-black uppercase mb-8 tracking-tight md:text-right">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-orbitron font-black uppercase mb-6 md:mb-8 tracking-tight">
             EXOPLANET
           </h2>
-          <div className="space-y-6 text-lg md:text-xl leading-relaxed text-[#d2d2d2]  text-center md:text-right">
+          <div className="space-y-4 md:space-y-6 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-[#d2d2d2] px-2">
             <p className="font-light">
               An <span className="font-bold text-orange-400">exoplanet</span> is a planet that orbits a star outside our solar system. 
               These distant worlds come in a stunning variety of sizes and compositions, from gas giants larger than Jupiter 
@@ -266,39 +267,39 @@ function Home() {
           </div>
           <Link 
             to="/predict" 
-            className="inline-block mt-12 bg-orange-400 text-black font-bold text-xl px-12 py-4 hover:bg-orange-300 transition-colors uppercase tracking-wide"
+            className="inline-block mt-8 md:mt-12 bg-orange-400 text-black font-bold text-sm sm:text-base md:text-lg lg:text-xl px-6 sm:px-8 md:px-12 py-3 md:py-4 hover:bg-orange-300 transition-colors uppercase tracking-wide"
           >
             START DETECTING
           </Link>
         </div>
       </div>
-      <div className="px-28 relative z-10">
-        <div className="text-white font-orbitron text-center text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight mx-auto">
+      <div className="px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
+        <div className="text-white font-orbitron text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase mb-6 tracking-tight leading-tight mx-auto">
           Discovery of Exoplanets
         </div>
         
         {/* Statistics Display */}
-        <div className="flex justify-center items-center gap-8 mb-12 flex-wrap">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 md:gap-8 mb-8 md:mb-12 flex-wrap">
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-black text-orange-400 mb-2">
+            <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-orange-400 mb-2">
               {fetchData.planet?.toLocaleString() || '6,022'}
             </div>
-            <div className="text-lg text-gray-300 font-medium">EXOPLANETS</div>
+            <div className="text-sm sm:text-base md:text-lg text-gray-300 font-medium">EXOPLANETS</div>
           </div>
           
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-black text-orange-400 mb-2">
+            <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-orange-400 mb-2">
               {fetchData.star?.toLocaleString() || '4,500+'}
             </div>
-            <div className="text-lg text-gray-300 font-medium">STARS</div>
+            <div className="text-sm sm:text-base md:text-lg text-gray-300 font-medium">STARS</div>
           </div>
           
-          <div className="text-center bg-black/40 rounded-2xl p-6 border border-white/20">
-            <div className="text-lg font-bold text-orange-400 mb-2">NEW DISCOVERY</div>
-            <div className="text-xl font-black text-white mb-1">
+          <div className="text-center bg-black/40 rounded-2xl p-4 md:p-6 border border-white/20 w-full sm:w-auto">
+            <div className="text-sm md:text-lg font-bold text-orange-400 mb-2">NEW DISCOVERY</div>
+            <div className="text-lg md:text-xl font-black text-white mb-1">
               {latestDiscovery?.title?.rendered || 'TOI-5799 c'}
             </div>
-            <div className="text-sm text-gray-300">
+            <div className="text-xs md:text-sm text-gray-300">
               {latestDiscovery?.acf?.planet_type || 'Super Earth'} • {latestDiscovery?.acf?.discovery_date || '2025'}
             </div>
             <div className="text-xs text-blue-400 hover:text-blue-300 cursor-pointer mt-2" onClick={() => window.open(latestDiscovery?.link || 'https://science.nasa.gov/exoplanet-catalog/toi-5799-c/', '_blank')}>
@@ -307,59 +308,59 @@ function Home() {
           </div>
         </div>
         {/* Information Cards Section */}
-      <div className="w-full h-full py-16 px-4 md:px-0 bg-gradient-to-r">
+      <div className="w-full h-full py-8 md:py-16 px-4 md:px-0 bg-gradient-to-r">
         {!expandedInfoCard ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {/* Habitable Zone Card */}
             <div 
-              className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-8  border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
+              className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
               onClick={() => handleInfoCardClick('habitableZone')}
             >
-              <div className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
+              <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
               <img 
                 src="/habitableZone.jpeg" 
                 alt="Habitable Zone" 
                 className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-all duration-300"
               />
             </div>
-              <h3 className="text-2xl font-orbitron font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">The Habitable Zone</h3>
-              <p className="text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
+              <h3 className="text-lg md:text-xl lg:text-2xl font-orbitron font-black mb-2 md:mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300 text-center">The Habitable Zone</h3>
+              <p className="text-xs md:text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
                 {infoCardsContent.habitableZone.description}
               </p>
             </div>
 
             {/* How Are They Found Card */}
             <div 
-              className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-8  border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
+              className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
               onClick={() => handleInfoCardClick('detection')}
             >
-              <div className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
+              <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
                 <img 
                   src="/analysis.png" 
                   alt="Analysis" 
                   className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-all duration-300"
                 />
               </div>
-              <h3 className="text-2xl font-orbitron font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">Why We Search?</h3>
-              <p className="text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
+              <h3 className="text-lg md:text-xl lg:text-2xl font-orbitron font-black mb-2 md:mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300 text-center">Why We Search?</h3>
+              <p className="text-xs md:text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
                 {infoCardsContent.detection.description}
               </p>
               </div>
 
               {/* How Do We Find Exoplanets Card */}
               <div 
-                className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-8  border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
+                className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
                 onClick={() => handleInfoCardClick('finding')}
               >
-                <div className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
+                <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
                   <img 
                     src="/whyfind.png" 
                     alt="How Do We Find Exoplanets?" 
                     className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-all duration-300"
                   />
                 </div>
-                <h3 className="text-2xl font-orbitron font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">How Do We Find Exoplanets?</h3>
-                <p className="text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-orbitron font-black mb-2 md:mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300 text-center">How Do We Find Exoplanets?</h3>
+                <p className="text-xs md:text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
                   {infoCardsContent.finding.description}
                 </p>
               </div>
@@ -388,16 +389,16 @@ function Home() {
                 </p>
               </div>
 
-              <div className="flex gap-8">
+              <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
                 {/* Content Section */}
-                <div className="flex-1 space-y-8">
+                <div className="flex-1 space-y-4 md:space-y-6 lg:space-y-8">
                   {Object.entries(infoCardsContent[expandedInfoCard].detailedContent).map(([key, value], index) => (
                     <div 
                       key={key} 
-                      className="bg-white/5 rounded-xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:bg-white/10 animate-fadeInUp"
+                      className="bg-white/5 rounded-xl p-4 md:p-6 lg:p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:bg-white/10 animate-fadeInUp"
                       style={{ animationDelay: `${index * 200 + 300}ms` }}
                     >
-                      <h3 className="text-2xl font-bold mb-4 text-white capitalize">
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-3 md:mb-4 text-white capitalize">
                         {key === 'whatItIs' ? 'What It Is' : 
                          key === 'keyFactors' ? 'Key Factors' :
                          key === 'howItVaries' ? 'How Habitable Zone Varies for Different Stars' :
@@ -498,8 +499,8 @@ function Home() {
                 </div>
                 
                 {/* Image Section */}
-                <div className="flex-shrink-0 w-80">
-                  <div className="sticky top-8">
+                <div className="flex-shrink-0 w-full lg:w-80">
+                  <div className="sticky top-4 md:top-8">
                     {expandedInfoCard === 'habitableZone' ? (
                       <img 
                         src="/habitableZone.jpeg" 
@@ -531,13 +532,13 @@ function Home() {
       </div>
     </div>
     {/* Statistics and Discovery Section */}
-    <div className="mt-20 mb-16 px-8 md:px-16 lg:px-28 relative z-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div className="mt-12 md:mt-20 mb-12 md:mb-16 px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
         {/* Left Section: Planet Types */}
-        <div className="bg-black/60 rounded-2xl p-8 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-8">Planet Types</h2>
+        <div className="bg-black/60 rounded-2xl p-4 md:p-6 lg:p-8 border border-white/20">
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-6 md:mb-8">Planet Types</h2>
           
-          <div className="flex items-center gap-8 mb-8">
+          <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8">
             <div className="flex-shrink-0">
               <div className="w-32 h-32 relative">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
@@ -601,8 +602,8 @@ function Home() {
             </div>
             
             <div className="flex-1">
-              <div className="text-4xl font-bold text-white mb-2">{fetchData.planet?.toLocaleString() || '6,022'}</div>
-              <div className="text-lg font-bold text-orange-500 mb-6">CONFIRMED EXOPLANETS</div>
+              <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">{fetchData.planet?.toLocaleString() || '6,022'}</div>
+              <div className="text-sm md:text-base lg:text-lg font-bold text-orange-500 mb-4 md:mb-6">CONFIRMED EXOPLANETS</div>
               
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -636,8 +637,8 @@ function Home() {
         </div>
 
         {/* Right Section: New Discovery */}
-        <div className="bg-black/60 rounded-2xl p-8 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-8">New Discovery</h2>
+        <div className="bg-black/60 rounded-2xl p-4 md:p-6 lg:p-8 border border-white/20">
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-6 md:mb-8">New Discovery</h2>
           
           <div className="mb-6">
             <img 
@@ -647,22 +648,22 @@ function Home() {
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6">
             <div>
               <div className="text-orange-500 text-xs font-bold uppercase mb-1">PLANET NAME</div>
-              <div className="text-white font-bold">{latestDiscovery?.title?.rendered || 'TOI-5799 c'}</div>
+              <div className="text-white font-bold text-sm md:text-base">{latestDiscovery?.title?.rendered || 'TOI-5799 c'}</div>
             </div>
             <div>
               <div className="text-orange-500 text-xs font-bold uppercase mb-1">PLANET TYPE</div>
-              <div className="text-white font-bold">{latestDiscovery?.acf?.planet_type || 'Super Earth'}</div>
+              <div className="text-white font-bold text-sm md:text-base">{latestDiscovery?.acf?.planet_type || 'Super Earth'}</div>
             </div>
             <div>
               <div className="text-orange-500 text-xs font-bold uppercase mb-1">DISCOVERY DATE</div>
-              <div className="text-white font-bold">{latestDiscovery?.acf?.discovery_date || '2025'}</div>
+              <div className="text-white font-bold text-sm md:text-base">{latestDiscovery?.acf?.discovery_date || '2025'}</div>
             </div>
             <div>
               <div className="text-orange-500 text-xs font-bold uppercase mb-1">DETECTION METHOD</div>
-              <div className="text-white font-bold">{latestDiscovery?.acf?.detection_method || 'Transit'}</div>
+              <div className="text-white font-bold text-sm md:text-base">{latestDiscovery?.acf?.detection_method || 'Transit'}</div>
             </div>
           </div>
           
@@ -673,76 +674,76 @@ function Home() {
       </div>
     </div>
 
-    <div className="mt-20 mb-16 px-8 md:px-16 lg:px-28 relative z-10">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+    <div className="mt-12 md:mt-20 mb-12 md:mb-16 px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
+      <div className="text-center mb-8 md:mb-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">
           <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
             Start Your Journey
           </span>
         </h2>
-        <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+        <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-3xl mx-auto px-2">
           Choose your path to explore the cosmos and discover new worlds beyond our solar system
         </p>
       </div>
       
-      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
         {/* Predict Exoplanets Card */}
-        <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
+        <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
                onClick={() => window.location.href = '/predict'}>
-          <div className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
-            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
+            <svg className="w-8 h-8 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M9 19c-5 0-8-3-8-8s3-8 8-8 8 3 8 8-3 8-8 8z"/>
                   <path d="M21 21l-4.35-4.35"/>
                 </svg>
               </div>
-          <h3 className="text-2xl font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">Predict Exoplanets</h3>
+          <h3 className="text-lg md:text-xl lg:text-2xl font-black mb-2 md:mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300 text-center">Predict Exoplanets</h3>
           
         </div>
 
         {/* Train a Model Card */}
-        <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
+        <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
              onClick={() => window.location.href = '/training'}>
-          <div className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
-            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
+            <svg className="w-8 h-8 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                   <path d="M2 17l10 5 10-5"/>
                   <path d="M2 12l10 5 10-5"/>
                 </svg>
               </div>
-          <h3 className="text-2xl font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">Train a Model</h3>
+          <h3 className="text-lg md:text-xl lg:text-2xl font-black mb-2 md:mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300 text-center">Train a Model</h3>
           
         </div>
         
         {/* Exoplanet Game Card */}
-        <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
+        <div className="flex flex-col items-center bg-black/60 rounded-2xl shadow-lg p-4 md:p-6 lg:p-8 border border-white hover:scale-105 hover:border-white transition-all duration-500 group cursor-pointer"
                onClick={() => window.location.href = '/game'}>
-          <div className="w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
-            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <div className="w-16 h-16 md:w-20 md:h-20 mb-4 md:mb-6 flex items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 overflow-hidden group-hover:scale-105 group-hover:rounded-none">
+            <svg className="w-8 h-8 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                   <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
                   <line x1="12" y1="22.08" x2="12" y2="12"/>
                 </svg>
               </div>
-          <h3 className="text-2xl font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">Exoplanet Game</h3>
+          <h3 className="text-lg md:text-xl lg:text-2xl font-black mb-2 md:mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300 text-center">Exoplanet Game</h3>
           
         </div>
       </div>
     </div>
 
     {/* Did You Know Section */}
-    <div className="mt-16 mb-8 px-8 md:px-16 lg:px-28 relative z-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="mt-12 md:mt-16 mb-6 md:mb-8 px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
         {/* First Did You Know Card */}
-        <div className="bg-black/60 rounded-2xl p-8 border border-white/20">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-12 h-12 bg-orange-400/20 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <div className="bg-black/60 rounded-2xl p-4 md:p-6 lg:p-8 border border-white/20">
+          <div className="flex items-start gap-3 md:gap-4">
+            <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-orange-400/20 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5 md:w-6 md:h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
               </svg>
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white mb-3">Fun Fact</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">Fun Fact</h3>
+              <p className="text-gray-300 leading-relaxed text-sm md:text-base">
                 Some exoplanets orbit two stars at once, much like the fictional planet Tatooine from Star Wars. It sounds like science fiction, but NASA's Kepler space telescope has confirmed that these "circumbinary" planets are real. On a world like Kepler-16b, you would get to experience a unique double sunset and sunrise every day.
               </p>
             </div>
@@ -750,16 +751,16 @@ function Home() {
         </div>
 
         {/* Second Did You Know Card */}
-        <div className="bg-black/60 rounded-2xl p-8 border border-white/20">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-12 h-12 bg-orange-400/20 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <div className="bg-black/60 rounded-2xl p-4 md:p-6 lg:p-8 border border-white/20">
+          <div className="flex items-start gap-3 md:gap-4">
+            <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-orange-400/20 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5 md:w-6 md:h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
               </svg>
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white mb-3">Did You Know?</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">Did You Know?</h3>
+              <p className="text-gray-300 leading-relaxed text-sm md:text-base">
                 On average, it is estimated that there is at least one planet for every star in the galaxy. That means there's something on the order of billions of planets in our galaxy alone, many in Earth's size range. These planets outside of our solar system are known as Exoplanets.
               </p>
             </div>
@@ -768,34 +769,34 @@ function Home() {
       </div>
     </div>
     {/* Types of Exoplanets Section */}
-    <div className="mt-16 mb-8 px-8 md:px-16 lg:px-28 relative z-10">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+    <div className="mt-12 md:mt-16 mb-6 md:mb-8 px-4 md:px-8 lg:px-16 xl:px-28 relative z-10">
+      <div className="text-center mb-8 md:mb-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">
           <span className="bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
             Types of Exoplanets
           </span>
         </h2>
-        <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+        <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-3xl mx-auto px-2">
           Click on any exoplanet type to explore detailed information about these fascinating worlds beyond our solar system.
         </p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-4 md:space-y-6 lg:space-y-8">
         {/* Gas Giants Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-4 md:p-6 lg:p-8 cursor-pointer `}
         >
-          <div className={`flex items-center gap-8 `}>
-            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+          <div className={`flex flex-col sm:flex-row items-center gap-4 md:gap-6 lg:gap-8 `}>
+            <div className={`w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
               <img 
                 src="/gasgiant.jpeg" 
                 alt="Gas Giant Exoplanet" 
                 className="w-full h-full object-cover rounded-full object-left"
               />
             </div>
-            <div className={`flex-1 `}>
-            <h3 className="text-3xl font-bold mb-4 text-white">Gas Giants</h3>
-            <p className="text-gray-300 text-xl leading-relaxed">
+            <div className={`flex-1 text-center sm:text-left `}>
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4 text-white">Gas Giants</h3>
+            <p className="text-gray-300 text-sm md:text-base lg:text-xl leading-relaxed">
                 {exoplanetTypes.gasGiants.description}
               </p>
               
@@ -806,18 +807,18 @@ function Home() {
 
         {/* Super-Earths Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-4 md:p-6 lg:p-8 cursor-pointer `}
           onClick={() => handleCardClick('superEarths')}
         >
-          <div className={`flex items-center gap-8`}>
-            <div className={`flex-1 `}>
-            <h3 className="text-3xl font-bold mb-4 text-white">Super-Earths</h3>
-            <p className="text-gray-300 text-xl leading-relaxed">
+          <div className={`flex flex-col sm:flex-row items-center gap-4 md:gap-6 lg:gap-8`}>
+            <div className={`flex-1 text-center sm:text-right `}>
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4 text-white">Super-Earths</h3>
+            <p className="text-gray-300 text-sm md:text-base lg:text-xl leading-relaxed">
                 {exoplanetTypes.superEarths.description}
               </p>
               
             </div>
-            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+            <div className={`w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
               <img 
                 src="/superearth.jpeg" 
                 alt="Super-Earth Exoplanet" 
@@ -831,20 +832,20 @@ function Home() {
 
         {/* Ice Giants Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-4 md:p-6 lg:p-8 cursor-pointer `}
           onClick={() => handleCardClick('iceGiants')}
         >
-          <div className={`flex items-center gap-8 `}>
-            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+          <div className={`flex flex-col sm:flex-row items-center gap-4 md:gap-6 lg:gap-8 `}>
+            <div className={`w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
               <img 
                 src="/neptunelike.jpeg" 
                 alt="Ice Giant Exoplanet" 
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
-            <div className={`flex-1 `}>
-              <h3 className="text-3xl font-bold mb-4 text-white">Ice Giants</h3>
-            <p className="text-gray-300 text-xl leading-relaxed">
+            <div className={`flex-1 text-center sm:text-left `}>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4 text-white">Ice Giants</h3>
+            <p className="text-gray-300 text-sm md:text-base lg:text-xl leading-relaxed">
                 {exoplanetTypes.iceGiants.description}
               </p>
              
@@ -855,18 +856,18 @@ function Home() {
 
         {/* Terrestrial Card */}
         <div 
-          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-8 cursor-pointer `}
+          className={`bg-black/60 border border-white hover:scale-105 hover:border-white transition-all duration-500 rounded-2xl p-4 md:p-6 lg:p-8 cursor-pointer `}
           onClick={() => handleCardClick('terrestrial')}
         >
-          <div className={`flex items-center gap-8 `}>
-            <div className={`flex-1 `}>
-              <h3 className="text-3xl font-bold mb-4 text-white">Terrestrial</h3>
-              <p className="text-gray-300 text-xl leading-relaxed">
+          <div className={`flex flex-col sm:flex-row items-center gap-4 md:gap-6 lg:gap-8 `}>
+            <div className={`flex-1 text-center sm:text-right `}>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4 text-white">Terrestrial</h3>
+              <p className="text-gray-300 text-sm md:text-base lg:text-xl leading-relaxed">
                 {exoplanetTypes.terrestrial.description}
               </p>
               
             </div>
-            <div className={`w-32 h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
+            <div className={`w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden shadow-2xl flex-shrink-0 `}>
               <img 
                 src="/terrential.jpeg" 
                 alt="Terrestrial Exoplanet" 
