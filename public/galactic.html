@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Explorer VR - Educational Space Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* UI Overlay */
+        #ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(11, 61, 145, 0.95);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 61, 33, 0.3);
+            pointer-events: all;
+            min-width: 280px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        #hud h3 {
+            color: #ffffff;
+            margin-bottom: 16px;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #FC3D21;
+            padding-bottom: 8px;
+        }
+
+        .hud-item {
+            margin: 8px 0;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hud-label {
+            color: #aaa;
+        }
+
+        .hud-value {
+            color: #00ff88;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        #health-bar, #energy-bar {
+            width: 160px;
+            height: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(252, 61, 33, 0.3);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FC3D21, #FF6B4A);
+            transition: width 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(252, 61, 33, 0.5);
+        }
+
+        #energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0B3D91, #4A90E2);
+            transition: width 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(11, 61, 145, 0.5);
+        }
+
+        /* Menu Screen */
+        #menu-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000 0%, #0B3D91 50%, #000814 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+            z-index: 2000;
+        }
+
+        #menu-screen.hidden {
+            display: none;
+        }
+
+        .game-title {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #FC3D21 50%, #0B3D91 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(252, 61, 33, 0.3)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 30px rgba(252, 61, 33, 0.5)); }
+        }
+
+        .game-subtitle {
+            font-size: 18px;
+            color: #E0E0E0;
+            margin-bottom: 48px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-btn, .level-btn, .action-btn {
+            padding: 16px 48px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #FC3D21 0%, #0B3D91 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(252, 61, 33, 0.3);
+            pointer-events: all;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 240px;
+        }
+
+        .menu-btn:hover, .level-btn:hover, .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(252, 61, 33, 0.5);
+            background: linear-gradient(135deg, #FF5733 0%, #0B3D91 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-btn:active, .level-btn:active, .action-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(252, 61, 33, 0.4);
+        }
+
+        .instructions {
+            margin-top: 48px;
+            max-width: 700px;
+            text-align: left;
+            background: rgba(11, 61, 145, 0.85);
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 61, 33, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .instructions h3 {
+            color: #FC3D21;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .instructions p {
+            margin: 12px 0;
+            color: #E8E8E8;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .instructions strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Level Selection */
+        #level-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000 0%, #0B3D91 50%, #000814 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+            z-index: 2000;
+        }
+
+        #level-screen.show {
+            display: flex;
+        }
+
+        #level-screen h2 {
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .level-card {
+            background: rgba(11, 61, 145, 0.85);
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 61, 33, 0.3);
+            text-align: center;
+            min-width: 280px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(252, 61, 33, 0.4);
+            border-color: rgba(252, 61, 33, 0.6);
+        }
+
+        .level-card h3 {
+            color: #ffffff;
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .level-card p {
+            color: #D0D0D0;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Info Popup */
+        #info-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(11, 61, 145, 0.98) 0%, rgba(0, 8, 20, 0.98) 100%);
+            padding: 40px;
+            border-radius: 16px;
+            border: 2px solid rgba(252, 61, 33, 0.4);
+            max-width: 650px;
+            display: none;
+            pointer-events: all;
+            z-index: 3000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            max-height: 80vh;
+            overflow-y: auto;
+            backdrop-filter: blur(15px);
+        }
+
+        #info-popup.show {
+            display: block;
+            animation: popupAppear 0.3s ease-out;
+        }
+
+        @keyframes popupAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        #info-popup h2 {
+            color: #ffffff;
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        #info-popup h3 {
+            color: #FC3D21;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-content {
+            color: #E0E0E0;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .info-stat {
+            background: rgba(252, 61, 33, 0.1);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #FC3D21;
+            font-size: 14px;
+        }
+
+        .info-stat strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            margin-top: 24px;
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #FC3D21 0%, #0B3D91 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .close-btn:hover {
+            background: linear-gradient(135deg, #FF5733 0%, #0B3D91 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(252, 61, 33, 0.5);
+        }
+
+        /* Controls Info */
+        #controls-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(11, 61, 145, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 61, 33, 0.3);
+            pointer-events: all;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        #controls-info h4 {
+            color: #FC3D21;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-item {
+            font-size: 13px;
+            margin: 8px 0;
+            color: #E0E0E0;
+            display: flex;
+            align-items: center;
+        }
+
+        .control-key {
+            display: inline-block;
+            background: rgba(252, 61, 33, 0.2);
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #ffffff;
+            font-weight: 600;
+            margin-right: 8px;
+            border: 1px solid rgba(252, 61, 33, 0.4);
+            min-width: 45px;
+            text-align: center;
+        }
+
+        /* Game Over / Victory Screen */
+        #game-end-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+            z-index: 2500;
+        }
+
+        #game-end-screen.show {
+            display: flex;
+        }
+
+        .end-title {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .end-title.victory {
+            color: #00ff88;
+            text-shadow: 0 0 20px #00ff88;
+        }
+
+        .end-title.defeat {
+            color: #ff4444;
+            text-shadow: 0 0 20px #ff4444;
+        }
+
+        .end-stats {
+            background: rgba(11, 61, 145, 0.85);
+            padding: 40px;
+            border-radius: 16px;
+            margin: 24px 0;
+            min-width: 450px;
+            border: 1px solid rgba(252, 61, 33, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .end-stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 16px 0;
+            font-size: 18px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .end-stat-item span:last-child {
+            color: #FC3D21;
+            font-weight: 700;
+        }
+
+        /* Mini-game Overlay */
+        #minigame-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            pointer-events: all;
+            z-index: 2000;
+        }
+
+        #minigame-overlay.show {
+            display: block;
+        }
+
+        #minigame-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        /* Pause Menu */
+        #pause-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+            z-index: 2500;
+            backdrop-filter: blur(10px);
+        }
+
+        #pause-menu.show {
+            display: flex;
+        }
+
+        .pause-content {
+            background: linear-gradient(135deg, rgba(11, 61, 145, 0.95) 0%, rgba(0, 8, 20, 0.95) 100%);
+            padding: 48px;
+            border-radius: 16px;
+            border: 2px solid rgba(252, 61, 33, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .pause-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: 3px;
+        }
+
+        .pause-subtitle {
+            font-size: 14px;
+            color: #B0B0B0;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .pause-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .pause-menu-btn {
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #FC3D21 0%, #0B3D91 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .pause-menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(252, 61, 33, 0.5);
+            background: linear-gradient(135deg, #FF5733 0%, #0B3D91 100%);
+        }
+
+        .btn-icon {
+            font-size: 18px;
+        }
+
+        .pause-stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 61, 33, 0.2);
+        }
+
+        .pause-stats h3 {
+            color: #FC3D21;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .pause-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .pause-stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #B0B0B0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .spectrum-game {
+            background: rgba(0, 30, 60, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid #00ffff;
+        }
+
+        .spectrum-lines {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .spectrum-line {
+            width: 60px;
+            height: 200px;
+            background: linear-gradient(180deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .spectrum-line:hover {
+            transform: scale(1.1);
+            border-color: #fff;
+        }
+
+        .spectrum-line.selected {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .element-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .element-btn {
+            padding: 15px 25px;
+            background: rgba(0, 100, 200, 0.6);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .element-btn:hover {
+            background: rgba(0, 150, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .element-btn.correct {
+            background: rgba(0, 200, 0, 0.8);
+            border-color: #00ff00;
+        }
+
+        .element-btn.incorrect {
+            background: rgba(200, 0, 0, 0.8);
+            border-color: #ff0000;
+        }
+
+        /* Target Indicator */
+        #target-indicator {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 3px solid #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+            animation: targetPulse 1s ease-in-out infinite;
+        }
+
+        #target-indicator.show {
+            display: block;
+        }
+
+        @keyframes targetPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        /* Notification */
+        #notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #FC3D21 0%, #0B3D91 100%);
+            padding: 24px 48px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            display: none;
+            pointer-events: none;
+            z-index: 3500;
+            box-shadow: 0 8px 40px rgba(252, 61, 33, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        #notification.show {
+            display: block;
+            animation: notificationAppear 2s ease-out;
+        }
+
+        @keyframes notificationAppear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            10% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            90% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        /* Loading */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading Galactic Explorer VR...</div>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div id="ui-overlay">
+        <!-- Menu Screen -->
+        <div id="menu-screen">
+            <div style="background: rgba(252, 61, 33, 0.1); padding: 8px 24px; border-radius: 50px; border: 2px solid rgba(252, 61, 33, 0.3); margin-bottom: 24px;">
+                <p style="color: #FC3D21; font-weight: 700; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;">Space Education Initiative</p>
+            </div>
+            <h1 class="game-title">GALACTIC EXPLORER VR</h1>
+            <p class="game-subtitle">Educational Space Exploration Game</p>
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="showLevelSelect()">Start Mission</button>
+                <button class="menu-btn" onclick="toggleInstructions()">Instructions</button>
+            </div>
+            <div class="instructions" id="instructions" style="display: none;">
+                <h3>How to Play</h3>
+                <p><strong>WASD / Arrow Keys:</strong> Move your spaceship</p>
+                <p><strong>Mouse Click / Spacebar:</strong> Scan planets when near them</p>
+                <p><strong>E Key:</strong> Launch mini-probe for detailed analysis</p>
+                <p><strong>Mission:</strong> Scan planets, avoid hazards, collect data!</p>
+                <p><strong>Goal:</strong> Learn about exoplanets while exploring the galaxy</p>
+            </div>
+        </div>
+
+        <!-- Level Selection -->
+        <div id="level-screen">
+            <h2 style="color: #ffffff; font-size: 42px; margin-bottom: 32px;">Select Your Mission</h2>
+            <div class="level-grid">
+                <div class="level-card">
+                    <h3>Level 1: Training Mission</h3>
+                    <p>8 planets, 30 asteroids, 10 comets - Hostile pursuit</p>
+                    <button class="level-btn" onclick="startLevel(1)">Launch</button>
+                </div>
+                <div class="level-card">
+                    <h3>Level 2: Deep Space</h3>
+                    <p>8 planets, 40 hazards, intense pursuit mode</p>
+                    <button class="level-btn" onclick="startLevel(2)">Launch</button>
+                </div>
+                <div class="level-card">
+                    <h3>Level 3: Binary Stars</h3>
+                    <p>2 stars, 10 planets, 50 aggressive hazards</p>
+                    <button class="level-btn" onclick="startLevel(3)">Launch</button>
+                </div>
+                <div class="level-card">
+                    <h3>Level 4: Extreme Mode</h3>
+                    <p>12 planets, 70 hazards hunting you down!</p>
+                    <button class="level-btn" onclick="startLevel(4)">Launch</button>
+                </div>
+            </div>
+            <button class="action-btn" onclick="backToMenu()" style="margin-top: 20px;">Back to Menu</button>
+        </div>
+
+        <!-- HUD -->
+        <div id="hud" style="display: none;">
+            <h3>Mission Status</h3>
+            <div class="hud-item">
+                <span class="hud-label">Level:</span>
+                <span class="hud-value" id="current-level">1</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Score:</span>
+                <span class="hud-value" id="score">0</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Planets Scanned:</span>
+                <span class="hud-value" id="planets-scanned">0</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Probes Landed:</span>
+                <span class="hud-value" id="probes-landed">0</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Health:</span>
+                <div id="health-bar"><div id="health-fill" style="width: 100%"></div></div>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">Energy:</span>
+                <div id="energy-bar"><div id="energy-fill" style="width: 100%"></div></div>
+            </div>
+        </div>
+
+        <!-- Controls Info -->
+        <div id="controls-info" style="display: none;">
+            <h4>Controls</h4>
+            <div class="control-item"><span class="control-key">WASD</span> Move</div>
+            <div class="control-item"><span class="control-key">Space</span> Scan</div>
+            <div class="control-item"><span class="control-key">E</span> Probe</div>
+            <div class="control-item"><span class="control-key">ESC</span> Pause</div>
+        </div>
+
+        <!-- Info Popup -->
+        <div id="info-popup">
+            <h2 id="popup-title">Planet Discovered!</h2>
+            <div class="info-content" id="popup-content"></div>
+            <button class="close-btn" onclick="closePopup()">Continue Mission</button>
+        </div>
+
+        <!-- Minigame Overlay -->
+        <div id="minigame-overlay">
+            <div id="minigame-content"></div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pause-menu">
+            <div class="pause-content">
+                <h1 class="pause-title">MISSION PAUSED</h1>
+                <p class="pause-subtitle">Game is temporarily suspended</p>
+                <div class="pause-buttons">
+                    <button class="pause-menu-btn" onclick="resumeGame()">
+                        <span class="btn-icon">▶️</span> Resume Mission
+                    </button>
+                    <button class="pause-menu-btn" onclick="restartLevel()">
+                        <span class="btn-icon">🔄</span> Restart Level
+                    </button>
+                    <button class="pause-menu-btn" onclick="backToMenu()">
+                        <span class="btn-icon">🏠</span> Main Menu
+                    </button>
+                </div>
+                <div class="pause-stats">
+                    <h3>Current Mission Stats</h3>
+                    <div class="pause-stat-grid">
+                        <div class="pause-stat-item">
+                            <div class="stat-value" id="pause-score">0</div>
+                            <div class="stat-label">Score</div>
+                        </div>
+                        <div class="pause-stat-item">
+                            <div class="stat-value" id="pause-planets">0</div>
+                            <div class="stat-label">Planets Scanned</div>
+                        </div>
+                        <div class="pause-stat-item">
+                            <div class="stat-value" id="pause-probes">0</div>
+                            <div class="stat-label">Probes Landed</div>
+                        </div>
+                        <div class="pause-stat-item">
+                            <div class="stat-value" id="pause-health">100%</div>
+                            <div class="stat-label">Health</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game End Screen -->
+        <div id="game-end-screen">
+            <h1 class="end-title" id="end-title">Mission Complete!</h1>
+            <div class="end-stats">
+                <div class="end-stat-item">
+                    <span>Final Score:</span>
+                    <span id="final-score">0</span>
+                </div>
+                <div class="end-stat-item">
+                    <span>Planets Scanned:</span>
+                    <span id="final-planets">0</span>
+                </div>
+                <div class="end-stat-item">
+                    <span>Probes Landed:</span>
+                    <span id="final-probes">0</span>
+                </div>
+                <div class="end-stat-item">
+                    <span>Hazards Avoided:</span>
+                    <span id="final-hazards">0</span>
+                </div>
+            </div>
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="restartLevel()">Retry Mission</button>
+                <button class="menu-btn" onclick="backToMenu()">Main Menu</button>
+            </div>
+        </div>
+
+        <!-- Target Indicator -->
+        <div id="target-indicator"></div>
+
+        <!-- Notification -->
+        <div id="notification"></div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // ========================================
+        // GAME INITIALIZATION
+        // ========================================
+        let scene, camera, renderer;
+        let spaceship, planets = [], stars = [], hazards = [];
+        let particles = [];
+        let keys = {};
+        let gameState = 'menu'; // menu, playing, paused, ended
+        let currentLevel = 1;
+        let score = 0;
+        let planetsScanned = 0;
+        let probesLanded = 0;
+        let hazardsAvoided = 0;
+        let health = 100;
+        let energy = 100;
+        let nearbyPlanet = null;
+
+        // Educational content - Real NASA Exoplanets
+        const planetFacts = [
+            {
+                name: "Kepler-442b",
+                type: "Super-Earth",
+                facts: "Kepler-442b is a super-Earth exoplanet orbiting in the habitable zone of its star. It's about 1.34 times the size of Earth and receives similar stellar flux to Earth, making it one of the most potentially habitable exoplanets discovered.",
+                habitability: 0.85,
+                atmosphere: "Potentially rocky with nitrogen-oxygen atmosphere",
+                distance: "1,206 light-years",
+                discovery: "Discovered by NASA's Kepler Space Telescope in 2015"
+            },
+            {
+                name: "TRAPPIST-1e",
+                type: "Rocky Planet",
+                facts: "TRAPPIST-1e is one of seven Earth-sized planets orbiting an ultra-cool dwarf star. It's considered one of the most habitable exoplanets discovered, with a similar size and mass to Earth and located in the habitable zone.",
+                habitability: 0.90,
+                atmosphere: "May contain water vapor and oxygen",
+                distance: "39 light-years",
+                discovery: "Discovered in 2017 using transit method"
+            },
+            {
+                name: "Proxima Centauri b",
+                type: "Earth-sized",
+                facts: "The closest known exoplanet to Earth, orbiting our nearest stellar neighbor Proxima Centauri. It receives similar stellar energy to Earth despite orbiting very close to its red dwarf star.",
+                habitability: 0.75,
+                atmosphere: "Unknown, possibly stripped by stellar flares",
+                distance: "4.24 light-years",
+                discovery: "Discovered in 2016 using radial velocity method"
+            },
+            {
+                name: "K2-18b",
+                type: "Mini-Neptune",
+                facts: "K2-18b made headlines as the first exoplanet in a habitable zone with detected water vapor in its atmosphere. It's about 2.6 times Earth's radius and represents a new class of potentially habitable worlds.",
+                habitability: 0.60,
+                atmosphere: "Water vapor detected via spectroscopy",
+                distance: "124 light-years",
+                discovery: "Discovered by Kepler Space Telescope in 2015"
+            },
+            {
+                name: "LHS 1140b",
+                type: "Super-Earth",
+                facts: "LHS 1140b is a rocky super-Earth orbiting a red dwarf star. It's denser than Earth and may retain a substantial atmosphere, making it an excellent target for atmospheric studies with the James Webb Space Telescope.",
+                habitability: 0.80,
+                atmosphere: "Likely rocky with potential liquid water",
+                distance: "40 light-years",
+                discovery: "Discovered in 2017 via transit method"
+            },
+            {
+                name: "TOI-700d",
+                type: "Earth-sized",
+                facts: "TOI-700d is an Earth-sized planet in its star's habitable zone, discovered by NASA's TESS mission. It's one of TESS's first Earth-sized habitable zone discoveries and receives 86% of the energy Earth gets from the Sun.",
+                habitability: 0.78,
+                atmosphere: "Possibly temperate with liquid water",
+                distance: "101 light-years",
+                discovery: "Discovered by TESS in 2020"
+            },
+            {
+                name: "HD 209458b (Osiris)",
+                type: "Hot Jupiter",
+                facts: "One of the first exoplanets where atmospheric composition was detected. Scientists found water vapor, sodium, and even detected its 'tail' of evaporating hydrogen, revolutionizing exoplanet atmosphere studies.",
+                habitability: 0.05,
+                atmosphere: "Hot hydrogen-helium with water vapor",
+                distance: "159 light-years",
+                discovery: "First transiting exoplanet discovered in 1999"
+            },
+            {
+                name: "51 Pegasi b",
+                type: "Hot Jupiter",
+                facts: "The first exoplanet discovered orbiting a Sun-like star in 1995, earning its discoverers the Nobel Prize in Physics. This discovery revolutionized astronomy and confirmed planets exist beyond our solar system.",
+                habitability: 0.02,
+                atmosphere: "Extremely hot gas giant atmosphere",
+                distance: "50 light-years",
+                discovery: "First exoplanet around a Sun-like star (1995)"
+            }
+        ];
+
+        // ========================================
+        // THREE.JS SETUP
+        // ========================================
+        function initThreeJS() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.00015);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+            camera.position.set(0, 150, 300);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('gameCanvas'),
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x333333);
+            scene.add(ambientLight);
+
+            // Create starfield
+            createStarfield();
+
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function createStarfield() {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 10000; i++) {
+                const x = (Math.random() - 0.5) * 5000;
+                const y = (Math.random() - 0.5) * 5000;
+                const z = (Math.random() - 0.5) * 5000;
+                vertices.push(x, y, z);
+
+                const color = new THREE.Color();
+                color.setHSL(Math.random() * 0.2 + 0.5, 0.3, 0.9);
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const starfield = new THREE.Points(geometry, material);
+            scene.add(starfield);
+        }
+
+        // ========================================
+        // SPACESHIP CREATION
+        // ========================================
+        function createSpaceship() {
+            const group = new THREE.Group();
+
+            // Main body (2x larger)
+            const bodyGeometry = new THREE.ConeGeometry(16, 50, 4);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x00aaff,
+                emissive: 0x003366,
+                shininess: 100
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.rotation.x = Math.PI / 2;
+            group.add(body);
+
+            // Wings (2x larger)
+            const wingGeometry = new THREE.BoxGeometry(60, 4, 20);
+            const wingMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x0088cc,
+                emissive: 0x002244
+            });
+            const wing = new THREE.Mesh(wingGeometry, wingMaterial);
+            wing.position.z = -10;
+            group.add(wing);
+
+            // Engine glow (2x larger)
+            const engineGeometry = new THREE.SphereGeometry(6, 16, 16);
+            const engineMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xff6600,
+                transparent: true,
+                opacity: 0.8
+            });
+            const engine = new THREE.Mesh(engineGeometry, engineMaterial);
+            engine.position.z = -30;
+            group.add(engine);
+
+            // Cockpit (2x larger)
+            const cockpitGeometry = new THREE.SphereGeometry(8, 16, 16);
+            const cockpitMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x88ccff,
+                emissive: 0x224466
+            });
+            const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
+            cockpit.position.z = 16;
+            group.add(cockpit);
+
+            // Lights
+            const pointLight = new THREE.PointLight(0x00aaff, 1, 100);
+            group.add(pointLight);
+
+            group.position.set(0, 0, 200);
+            group.userData = {
+                velocity: new THREE.Vector3(),
+                health: 100,
+                energy: 100
+            };
+
+            scene.add(group);
+            return group;
+        }
+
+        // ========================================
+        // PLANET CREATION
+        // ========================================
+        function createPlanet(radius, color, orbitRadius, orbitSpeed, planetData) {
+            const geometry = new THREE.SphereGeometry(radius, 32, 32);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: color,
+                emissive: color,
+                emissiveIntensity: 0.2,
+                shininess: 30
+            });
+            const planet = new THREE.Mesh(geometry, material);
+
+            // Add atmosphere glow
+            const glowGeometry = new THREE.SphereGeometry(radius * 1.2, 32, 32);
+            const glowMaterial = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.2,
+                side: THREE.BackSide
+            });
+            const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+            planet.add(glow);
+
+            planet.position.x = orbitRadius;
+            planet.userData = {
+                orbitRadius: orbitRadius,
+                orbitSpeed: orbitSpeed,
+                angle: Math.random() * Math.PI * 2,
+                scanned: false,
+                probeCollected: false,
+                data: planetData,
+                radius: radius
+            };
+
+            scene.add(planet);
+            return planet;
+        }
+
+        // ========================================
+        // STAR CREATION
+        // ========================================
+        function createStar(x, y, z, size, color) {
+            const geometry = new THREE.SphereGeometry(size, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: color });
+            const star = new THREE.Mesh(geometry, material);
+            star.position.set(x, y, z);
+
+            // Add light source
+            const light = new THREE.PointLight(color, 2, 1000);
+            star.add(light);
+
+            // Add corona effect
+            const coronaGeometry = new THREE.SphereGeometry(size * 1.5, 32, 32);
+            const coronaMaterial = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.BackSide
+            });
+            const corona = new THREE.Mesh(coronaGeometry, coronaMaterial);
+            star.add(corona);
+
+            scene.add(star);
+            return star;
+        }
+
+        // ========================================
+        // HAZARD CREATION
+        // ========================================
+        function createHazard(type = 'asteroid') {
+            let geometry, material, mesh;
+            
+            if (type === 'asteroid') {
+                geometry = new THREE.DodecahedronGeometry(5 + Math.random() * 10, 0);
+                material = new THREE.MeshPhongMaterial({ 
+                    color: 0x888888,
+                    flatShading: true
+                });
+            } else if (type === 'comet') {
+                geometry = new THREE.SphereGeometry(8, 16, 16);
+                material = new THREE.MeshPhongMaterial({ 
+                    color: 0x6699ff,
+                    emissive: 0x3366cc,
+                    emissiveIntensity: 0.5
+                });
+            }
+
+            mesh = new THREE.Mesh(geometry, material);
+            
+            // Random position around the system
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 300 + Math.random() * 400;
+            mesh.position.x = Math.cos(angle) * distance;
+            mesh.position.y = (Math.random() - 0.5) * 100;
+            mesh.position.z = Math.sin(angle) * distance;
+
+            // Random velocity toward center
+            const speed = 0.5 + Math.random() * (currentLevel * 0.5);
+            mesh.userData = {
+                velocity: new THREE.Vector3(
+                    -mesh.position.x * 0.001 * speed,
+                    0,
+                    -mesh.position.z * 0.001 * speed
+                ),
+                rotation: new THREE.Vector3(
+                    Math.random() * 0.02,
+                    Math.random() * 0.02,
+                    Math.random() * 0.02
+                ),
+                type: type,
+                radius: geometry.parameters.radius || 5
+            };
+
+            scene.add(mesh);
+            return mesh;
+        }
+
+        // ========================================
+        // LEVEL SETUP
+        // ========================================
+        function setupLevel(level) {
+            // Clear previous level
+            planets.forEach(p => scene.remove(p));
+            stars.forEach(s => scene.remove(s));
+            hazards.forEach(h => scene.remove(h));
+            planets = [];
+            stars = [];
+            hazards = [];
+
+            currentLevel = level;
+            
+            switch(level) {
+                case 1:
+                    // Single star, 8 planets, many hazards
+                    stars.push(createStar(0, 0, 0, 30, 0xffff00));
+                    planets.push(createPlanet(10, 0xff6600, 90, 0.01, planetFacts[0]));
+                    planets.push(createPlanet(15, 0x00aaff, 140, 0.009, planetFacts[1]));
+                    planets.push(createPlanet(12, 0x66ff66, 190, 0.007, planetFacts[2]));
+                    planets.push(createPlanet(14, 0xff88ff, 240, 0.006, planetFacts[3]));
+                    planets.push(createPlanet(11, 0xffaa00, 290, 0.005, planetFacts[4]));
+                    planets.push(createPlanet(13, 0x88aaff, 340, 0.004, planetFacts[5]));
+                    planets.push(createPlanet(16, 0xff4488, 390, 0.003, planetFacts[6]));
+                    planets.push(createPlanet(14, 0x44ff88, 440, 0.002, planetFacts[7]));
+                    
+                    for (let i = 0; i < 30; i++) {
+                        hazards.push(createHazard('asteroid'));
+                    }
+                    for (let i = 0; i < 10; i++) {
+                        hazards.push(createHazard('comet'));
+                    }
+                    break;
+
+                case 2:
+                    // Single star, 8 planets, more hazards
+                    stars.push(createStar(0, 0, 0, 35, 0xffaa00));
+                    planets.push(createPlanet(8, 0xff3300, 80, 0.015, planetFacts[0]));
+                    planets.push(createPlanet(12, 0xff9900, 130, 0.012, planetFacts[1]));
+                    planets.push(createPlanet(16, 0x3399ff, 180, 0.010, planetFacts[2]));
+                    planets.push(createPlanet(14, 0x00ff88, 230, 0.008, planetFacts[3]));
+                    planets.push(createPlanet(10, 0xcc66ff, 280, 0.006, planetFacts[4]));
+                    planets.push(createPlanet(13, 0xff6699, 330, 0.005, planetFacts[5]));
+                    planets.push(createPlanet(15, 0x66ffcc, 380, 0.004, planetFacts[6]));
+                    planets.push(createPlanet(11, 0xffcc66, 430, 0.003, planetFacts[7]));
+                    
+                    for (let i = 0; i < 40; i++) {
+                        hazards.push(createHazard(Math.random() > 0.5 ? 'asteroid' : 'comet'));
+                    }
+                    break;
+
+                case 3:
+                    // Binary stars, 10 planets, many hazards
+                    stars.push(createStar(-60, 0, 0, 28, 0xffcc00));
+                    stars.push(createStar(60, 0, 0, 25, 0xff6600));
+                    
+                    for (let i = 0; i < 10; i++) {
+                        const fact = planetFacts[i % planetFacts.length];
+                        const radius = 9 + Math.random() * 8;
+                        const colors = [0xff0000, 0xff6600, 0xffcc00, 0x00ff00, 0x0088ff, 0x6600ff, 0xff00ff, 0xff4488, 0x44ff88, 0xffaa44];
+                        const orbit = 80 + i * 35;
+                        const speed = 0.018 - i * 0.0015;
+                        planets.push(createPlanet(radius, colors[i], orbit, speed, fact));
+                    }
+                    
+                    for (let i = 0; i < 50; i++) {
+                        hazards.push(createHazard(Math.random() > 0.3 ? 'asteroid' : 'comet'));
+                    }
+                    break;
+
+                case 4:
+                    // Extreme mode
+                    stars.push(createStar(0, 0, 0, 40, 0xff3300));
+                    
+                    for (let i = 0; i < 12; i++) {
+                        const fact = planetFacts[i % planetFacts.length];
+                        const radius = 8 + Math.random() * 10;
+                        const color = Math.random() * 0xffffff;
+                        const orbit = 70 + i * 35;
+                        const speed = 0.02 - i * 0.0015;
+                        planets.push(createPlanet(radius, color, orbit, speed, fact));
+                    }
+                    
+                    for (let i = 0; i < 70; i++) {
+                        hazards.push(createHazard(Math.random() > 0.4 ? 'asteroid' : 'comet'));
+                    }
+                    break;
+            }
+        }
+
+        // ========================================
+        // GAME STATE MANAGEMENT
+        // ========================================
+        function showLevelSelect() {
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('level-screen').classList.add('show');
+        }
+
+        function backToMenu() {
+            document.getElementById('menu-screen').classList.remove('hidden');
+            document.getElementById('level-screen').classList.remove('show');
+            document.getElementById('game-end-screen').classList.remove('show');
+            document.getElementById('pause-menu').classList.remove('show');
+            document.getElementById('hud').style.display = 'none';
+            document.getElementById('controls-info').style.display = 'none';
+            gameState = 'menu';
+        }
+
+        function pauseGame() {
+            if (gameState !== 'playing') return;
+            
+            gameState = 'paused';
+            const pauseMenu = document.getElementById('pause-menu');
+            
+            // Update pause menu stats
+            document.getElementById('pause-score').textContent = score;
+            document.getElementById('pause-planets').textContent = planetsScanned;
+            document.getElementById('pause-probes').textContent = probesLanded;
+            document.getElementById('pause-health').textContent = health + '%';
+            
+            pauseMenu.classList.add('show');
+        }
+
+        function resumeGame() {
+            const pauseMenu = document.getElementById('pause-menu');
+            pauseMenu.classList.remove('show');
+            
+            if (!document.getElementById('info-popup').classList.contains('show') &&
+                !document.getElementById('minigame-overlay').classList.contains('show')) {
+                gameState = 'playing';
+                showNotification('▶️ Mission Resumed');
+            }
+        }
+
+        function toggleInstructions() {
+            const inst = document.getElementById('instructions');
+            inst.style.display = inst.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function startLevel(level) {
+            document.getElementById('level-screen').classList.remove('show');
+            document.getElementById('hud').style.display = 'block';
+            document.getElementById('controls-info').style.display = 'block';
+            
+            // Reset game state
+            score = 0;
+            planetsScanned = 0;
+            probesLanded = 0;
+            hazardsAvoided = 0;
+            health = 100;
+            energy = 100;
+            
+            updateHUD();
+            
+            // Setup level
+            setupLevel(level);
+            
+            // Create spaceship
+            if (spaceship) scene.remove(spaceship);
+            spaceship = createSpaceship();
+            
+            gameState = 'playing';
+        }
+
+        function restartLevel() {
+            startLevel(currentLevel);
+            document.getElementById('game-end-screen').classList.remove('show');
+        }
+
+        function endGame(victory) {
+            gameState = 'ended';
+            
+            const endScreen = document.getElementById('game-end-screen');
+            const endTitle = document.getElementById('end-title');
+            
+            if (victory) {
+                endTitle.textContent = 'Mission Success! 🎉';
+                endTitle.className = 'end-title victory';
+            } else {
+                endTitle.textContent = 'Mission Failed 💥';
+                endTitle.className = 'end-title defeat';
+            }
+            
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-planets').textContent = planetsScanned;
+            document.getElementById('final-probes').textContent = probesLanded;
+            document.getElementById('final-hazards').textContent = hazardsAvoided;
+            
+            endScreen.classList.add('show');
+        }
+
+        // ========================================
+        // HUD UPDATE
+        // ========================================
+        function updateHUD() {
+            document.getElementById('current-level').textContent = currentLevel;
+            document.getElementById('score').textContent = score;
+            document.getElementById('planets-scanned').textContent = planetsScanned;
+            document.getElementById('probes-landed').textContent = probesLanded;
+            document.getElementById('health-fill').style.width = health + '%';
+            document.getElementById('energy-fill').style.width = energy + '%';
+        }
+
+        // ========================================
+        // POPUP SYSTEM
+        // ========================================
+        function showPlanetInfo(planetData) {
+            const popup = document.getElementById('info-popup');
+            const title = document.getElementById('popup-title');
+            const content = document.getElementById('popup-content');
+            
+            title.textContent = `Planet Discovered: ${planetData.name}`;
+            
+            content.innerHTML = `
+                <h3>📊 Planetary Data</h3>
+                <div class="info-stat"><strong>Type:</strong> ${planetData.type}</div>
+                <div class="info-stat"><strong>Habitability Score:</strong> ${(planetData.habitability * 100).toFixed(0)}%</div>
+                <div class="info-stat"><strong>Distance from Earth:</strong> ${planetData.distance}</div>
+                <div class="info-stat"><strong>Atmosphere:</strong> ${planetData.atmosphere}</div>
+                <div class="info-stat"><strong>Discovery:</strong> ${planetData.discovery}</div>
+                
+                <h3>🔬 Scientific Facts</h3>
+                <p style="margin-top: 10px;">${planetData.facts}</p>
+                
+                <h3>⭐ Bonus Points</h3>
+                <p style="margin-top: 10px; color: #00ff88;">+${Math.floor(planetData.habitability * 100)} points for scanning this exoplanet!</p>
+            `;
+            
+            popup.classList.add('show');
+            gameState = 'paused';
+        }
+
+        function closePopup() {
+            document.getElementById('info-popup').classList.remove('show');
+            if (gameState === 'paused') {
+                gameState = 'playing';
+            }
+        }
+
+        function showNotification(message, duration = 2000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+
+        // ========================================
+        // MINIGAME: SPECTRAL ANALYSIS
+        // ========================================
+        function launchSpectralGame() {
+            if (energy < 30) {
+                showNotification('Insufficient energy for spectral analysis!');
+                return;
+            }
+            
+            energy -= 30;
+            updateHUD();
+            
+            const overlay = document.getElementById('minigame-overlay');
+            const content = document.getElementById('minigame-content');
+            
+            const elements = ['Hydrogen', 'Helium', 'Oxygen', 'Carbon', 'Iron', 'Sodium'];
+            const correctElement = elements[Math.floor(Math.random() * elements.length)];
+            
+            content.innerHTML = `
+                <div class="spectrum-game">
+                    <h2 style="color: #00ffff; margin-bottom: 20px;">🌈 Spectral Analysis Challenge</h2>
+                    <p style="color: #ccc; margin-bottom: 20px;">Analyze the spectral lines to identify the element!</p>
+                    <div class="spectrum-lines">
+                        <div class="spectrum-line"></div>
+                        <div class="spectrum-line"></div>
+                        <div class="spectrum-line"></div>
+                    </div>
+                    <h3 style="color: #ffaa00; margin: 20px 0;">Select the element:</h3>
+                    <div class="element-options">
+                        ${elements.map(el => `
+                            <button class="element-btn" onclick="checkSpectralAnswer('${el}', '${correctElement}')">${el}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            overlay.classList.add('show');
+            gameState = 'paused';
+        }
+
+        function checkSpectralAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.element-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent === selected) {
+                    if (selected === correct) {
+                        btn.classList.add('correct');
+                        score += 200;
+                        showNotification('✅ Correct! +200 points', 1500);
+                    } else {
+                        btn.classList.add('incorrect');
+                        showNotification('❌ Incorrect! Try again next time', 1500);
+                    }
+                }
+                btn.disabled = true;
+            });
+            
+            updateHUD();
+            
+            setTimeout(() => {
+                document.getElementById('minigame-overlay').classList.remove('show');
+                gameState = 'playing';
+            }, 2000);
+        }
+
+        // ========================================
+        // CONTROLS
+        // ========================================
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            
+            if (gameState === 'playing') {
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    scanNearbyPlanet();
+                } else if (e.key.toLowerCase() === 'e') {
+                    launchProbe();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    pauseGame();
+                }
+            } else if (gameState === 'paused' && e.key === 'Escape') {
+                e.preventDefault();
+                if (!document.getElementById('info-popup').classList.contains('show') &&
+                    !document.getElementById('minigame-overlay').classList.contains('show')) {
+                    resumeGame();
+                }
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Mouse click for scanning
+        document.addEventListener('click', (e) => {
+            if (gameState === 'playing' && !e.target.closest('.menu-btn, .level-btn, .action-btn, .close-btn, .element-btn')) {
+                scanNearbyPlanet();
+            }
+        });
+
+        // ========================================
+        // SPACESHIP MOVEMENT
+        // ========================================
+        function updateSpaceship() {
+            if (!spaceship || gameState !== 'playing') return;
+
+            const acceleration = 0.5;
+            const maxSpeed = 3;
+            const drag = 0.95;
+
+            // Movement controls
+            if (keys['w'] || keys['arrowup']) {
+                spaceship.userData.velocity.z -= acceleration;
+            }
+            if (keys['s'] || keys['arrowdown']) {
+                spaceship.userData.velocity.z += acceleration;
+            }
+            if (keys['a'] || keys['arrowleft']) {
+                spaceship.userData.velocity.x -= acceleration;
+            }
+            if (keys['d'] || keys['arrowright']) {
+                spaceship.userData.velocity.x += acceleration;
+            }
+
+            // Apply drag
+            spaceship.userData.velocity.multiplyScalar(drag);
+
+            // Limit speed
+            if (spaceship.userData.velocity.length() > maxSpeed) {
+                spaceship.userData.velocity.setLength(maxSpeed);
+            }
+
+            // Update position
+            spaceship.position.add(spaceship.userData.velocity);
+
+            // Rotation based on velocity
+            if (spaceship.userData.velocity.length() > 0.1) {
+                const targetRotation = Math.atan2(spaceship.userData.velocity.x, spaceship.userData.velocity.z);
+                spaceship.rotation.y = targetRotation;
+            }
+
+            // Keep within bounds
+            const maxDistance = 500;
+            if (spaceship.position.length() > maxDistance) {
+                spaceship.position.setLength(maxDistance);
+            }
+
+            // Update camera to follow spaceship
+            camera.position.x = spaceship.position.x;
+            camera.position.z = spaceship.position.z + 300;
+            camera.lookAt(spaceship.position);
+
+            // Energy regeneration
+            if (energy < 100) {
+                energy += 0.05;
+                if (energy > 100) energy = 100;
+                updateHUD();
+            }
+        }
+
+        // ========================================
+        // PLANET ORBITS
+        // ========================================
+        function updatePlanets() {
+            planets.forEach(planet => {
+                planet.userData.angle += planet.userData.orbitSpeed;
+                planet.position.x = Math.cos(planet.userData.angle) * planet.userData.orbitRadius;
+                planet.position.z = Math.sin(planet.userData.angle) * planet.userData.orbitRadius;
+                
+                // Rotate planet
+                planet.rotation.y += 0.01;
+            });
+        }
+
+        // ========================================
+        // HAZARD MOVEMENT
+        // ========================================
+        function updateHazards() {
+            if (gameState !== 'playing') return;
+
+            hazards.forEach((hazard, index) => {
+                // Make asteroids chase the spaceship
+                if (spaceship && hazard.userData.type === 'asteroid') {
+                    // Calculate direction to spaceship
+                    const direction = new THREE.Vector3()
+                        .subVectors(spaceship.position, hazard.position)
+                        .normalize();
+                    
+                    // Adjust velocity to chase spaceship
+                    const chaseSpeed = 0.3 + (currentLevel * 0.15);
+                    hazard.userData.velocity.lerp(
+                        direction.multiplyScalar(chaseSpeed),
+                        0.02
+                    );
+                }
+                
+                // Move hazard
+                hazard.position.add(hazard.userData.velocity);
+                
+                // Rotate hazard
+                hazard.rotation.x += hazard.userData.rotation.x;
+                hazard.rotation.y += hazard.userData.rotation.y;
+                hazard.rotation.z += hazard.userData.rotation.z;
+
+                // Check collision with spaceship
+                if (spaceship) {
+                    const distance = hazard.position.distanceTo(spaceship.position);
+                    if (distance < hazard.userData.radius + 30) {
+                        // Collision!
+                        health -= 10;
+                        score = Math.max(0, score - 50);
+                        updateHUD();
+                        
+                        showNotification('💥 Hit by ' + hazard.userData.type + '! -10 Health', 1500);
+                        
+                        // Create explosion effect
+                        createExplosion(hazard.position);
+                        
+                        // Remove hazard
+                        scene.remove(hazard);
+                        hazards.splice(index, 1);
+                        
+                        // Check game over
+                        if (health <= 0) {
+                            destroySpaceship();
+                            setTimeout(() => {
+                                endGame(false);
+                            }, 2000);
+                        }
+                    }
+                }
+
+                // Remove if too far from center
+                if (hazard.position.length() > 1200) {
+                    scene.remove(hazard);
+                    hazards.splice(index, 1);
+                    hazardsAvoided++;
+                }
+            });
+
+            // Spawn new hazards in higher levels
+            if (Math.random() < 0.005 * currentLevel && hazards.length < 80) {
+                hazards.push(createHazard(Math.random() > 0.5 ? 'asteroid' : 'comet'));
+            }
+        }
+
+        // ========================================
+        // SCANNING MECHANICS
+        // ========================================
+        function scanNearbyPlanet() {
+            if (!spaceship || gameState !== 'playing') return;
+            
+            let closestPlanet = null;
+            let closestDistance = Infinity;
+
+            planets.forEach(planet => {
+                const distance = planet.position.distanceTo(spaceship.position);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestPlanet = planet;
+                }
+            });
+
+            if (closestPlanet && closestDistance < 80) {
+                if (!closestPlanet.userData.scanned) {
+                    closestPlanet.userData.scanned = true;
+                    planetsScanned++;
+                    const bonus = Math.floor(closestPlanet.userData.data.habitability * 100);
+                    score += bonus;
+                    updateHUD();
+                    
+                    // Create scan effect
+                    createScanEffect(closestPlanet.position);
+                    
+                    showPlanetInfo(closestPlanet.userData.data);
+                } else {
+                    showNotification('⚠️ Planet already scanned!');
+                }
+            } else {
+                showNotification('🔍 No planet in range!');
+            }
+
+            // Check if all planets scanned (victory condition)
+            if (planetsScanned === planets.length && gameState === 'playing') {
+                setTimeout(() => {
+                    endGame(true);
+                }, 2000);
+            }
+        }
+
+        function launchProbe() {
+            if (!spaceship || gameState !== 'playing') return;
+
+            let closestPlanet = null;
+            let closestDistance = Infinity;
+
+            planets.forEach(planet => {
+                const distance = planet.position.distanceTo(spaceship.position);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestPlanet = planet;
+                }
+            });
+
+            if (closestPlanet && closestDistance < 100) {
+                if (energy >= 20) {
+                    energy -= 20;
+                    updateHUD();
+                    
+                    if (!closestPlanet.userData.probeCollected) {
+                        closestPlanet.userData.probeCollected = true;
+                        probesLanded++;
+                        score += 150;
+                        updateHUD();
+                        
+                        // Create probe animation
+                        createProbeAnimation(spaceship.position, closestPlanet.position);
+                        
+                        showNotification('🛰️ Probe landed successfully! +150 points');
+                        
+                        // Chance to trigger spectral minigame
+                        if (Math.random() < 0.5) {
+                            setTimeout(() => {
+                                launchSpectralGame();
+                            }, 2000);
+                        }
+                    } else {
+                        showNotification('⚠️ Probe already deployed here!');
+                    }
+                } else {
+                    showNotification('⚡ Insufficient energy!');
+                }
+            } else {
+                showNotification('📡 No planet in range for probe!');
+            }
+        }
+
+        // ========================================
+        // SPACESHIP DESTRUCTION
+        // ========================================
+        function destroySpaceship() {
+            if (!spaceship) return;
+            
+            gameState = 'ended';
+            
+            // Create massive explosion at spaceship position
+            const explosionCenter = spaceship.position.clone();
+            
+            // Large initial explosion
+            for (let i = 0; i < 80; i++) {
+                const geometry = new THREE.SphereGeometry(3 + Math.random() * 4, 8, 8);
+                const colors = [0xff0000, 0xff6600, 0xffaa00, 0xffff00, 0xffffff];
+                const material = new THREE.MeshBasicMaterial({
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+                const particle = new THREE.Mesh(geometry, material);
+                particle.position.copy(explosionCenter);
+                
+                const velocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * 12,
+                    (Math.random() - 0.5) * 12,
+                    (Math.random() - 0.5) * 12
+                );
+                
+                particle.userData.velocity = velocity;
+                particle.userData.life = 60 + Math.random() * 40;
+                particle.userData.fadeSpeed = 0.015 + Math.random() * 0.01;
+                scene.add(particle);
+                particles.push(particle);
+            }
+            
+            // Create expanding shockwave rings
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const geometry = new THREE.RingGeometry(20, 40, 32);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: 0xff6600,
+                        transparent: true,
+                        opacity: 0.9,
+                        side: THREE.DoubleSide
+                    });
+                    const ring = new THREE.Mesh(geometry, material);
+                    ring.position.copy(explosionCenter);
+                    ring.lookAt(camera.position);
+                    scene.add(ring);
+
+                    let scale = 1;
+                    const animateRing = () => {
+                        scale += 0.3;
+                        ring.scale.set(scale, scale, 1);
+                        material.opacity -= 0.02;
+                        
+                        if (material.opacity > 0) {
+                            requestAnimationFrame(animateRing);
+                        } else {
+                            scene.remove(ring);
+                        }
+                    };
+                    animateRing();
+                }, i * 200);
+            }
+            
+            // Create flash effect
+            const flashGeometry = new THREE.SphereGeometry(50, 16, 16);
+            const flashMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 1
+            });
+            const flash = new THREE.Mesh(flashGeometry, flashMaterial);
+            flash.position.copy(explosionCenter);
+            scene.add(flash);
+            
+            let flashOpacity = 1;
+            const animateFlash = () => {
+                flashOpacity -= 0.05;
+                flash.scale.multiplyScalar(1.1);
+                flashMaterial.opacity = flashOpacity;
+                
+                if (flashOpacity > 0) {
+                    requestAnimationFrame(animateFlash);
+                } else {
+                    scene.remove(flash);
+                }
+            };
+            animateFlash();
+            
+            // Secondary explosions
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const offset = new THREE.Vector3(
+                        (Math.random() - 0.5) * 30,
+                        (Math.random() - 0.5) * 30,
+                        (Math.random() - 0.5) * 30
+                    );
+                    const secondaryPos = explosionCenter.clone().add(offset);
+                    createExplosion(secondaryPos);
+                }, i * 150);
+            }
+            
+            // Remove spaceship after a delay
+            setTimeout(() => {
+                if (spaceship) {
+                    scene.remove(spaceship);
+                }
+            }, 100);
+            
+            // Show dramatic notification
+            showNotification('🔥 SPACESHIP DESTROYED! 🔥', 2000);
+        }
+
+        // ========================================
+        // VISUAL EFFECTS
+        // ========================================
+        function createScanEffect(position) {
+            const geometry = new THREE.RingGeometry(10, 50, 32);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x00ffff,
+                transparent: true,
+                opacity: 0.8,
+                side: THREE.DoubleSide
+            });
+            const ring = new THREE.Mesh(geometry, material);
+            ring.position.copy(position);
+            ring.lookAt(camera.position);
+            scene.add(ring);
+
+            let scale = 1;
+            const animate = () => {
+                scale += 0.1;
+                ring.scale.set(scale, scale, 1);
+                material.opacity -= 0.02;
+                
+                if (material.opacity > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    scene.remove(ring);
+                }
+            };
+            animate();
+        }
+
+        function createExplosion(position) {
+            for (let i = 0; i < 20; i++) {
+                const geometry = new THREE.SphereGeometry(2, 8, 8);
+                const colors = [0xff0000, 0xff6600, 0xffaa00, 0xffff00];
+                const material = new THREE.MeshBasicMaterial({
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    transparent: true,
+                    opacity: 1
+                });
+                const particle = new THREE.Mesh(geometry, material);
+                particle.position.copy(position);
+                
+                const velocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * 5,
+                    (Math.random() - 0.5) * 5,
+                    (Math.random() - 0.5) * 5
+                );
+                
+                particle.userData.velocity = velocity;
+                particle.userData.life = 30;
+                particle.userData.fadeSpeed = 0.02 + Math.random() * 0.01;
+                scene.add(particle);
+                particles.push(particle);
+            }
+        }
+
+        function createProbeAnimation(start, end) {
+            const geometry = new THREE.SphereGeometry(3, 16, 16);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const probe = new THREE.Mesh(geometry, material);
+            probe.position.copy(start);
+            scene.add(probe);
+
+            let progress = 0;
+            const animate = () => {
+                progress += 0.02;
+                probe.position.lerpVectors(start, end, progress);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    scene.remove(probe);
+                    createExplosion(end);
+                }
+            };
+            animate();
+        }
+
+        function updateParticles() {
+            particles.forEach((particle, index) => {
+                if (particle.userData.velocity) {
+                    particle.position.add(particle.userData.velocity);
+                    particle.userData.velocity.multiplyScalar(0.95);
+                }
+                
+                // Fade out particles
+                if (particle.userData.fadeSpeed && particle.material.opacity !== undefined) {
+                    particle.material.opacity -= particle.userData.fadeSpeed;
+                    if (particle.material.opacity < 0) {
+                        particle.material.opacity = 0;
+                    }
+                }
+                
+                particle.userData.life--;
+                
+                if (particle.userData.life <= 0) {
+                    scene.remove(particle);
+                    particles.splice(index, 1);
+                }
+            });
+        }
+
+        // ========================================
+        // ANIMATION LOOP
+        // ========================================
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (gameState === 'playing') {
+                updateSpaceship();
+                updatePlanets();
+                updateHazards();
+                updateParticles();
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // ========================================
+        // WINDOW RESIZE
+        // ========================================
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // ========================================
+        // INITIALIZE
+        // ========================================
+        initThreeJS();
+        animate();
+    </script>
+</body>
+</html>

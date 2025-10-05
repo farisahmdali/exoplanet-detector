@@ -20,9 +20,9 @@ function Layout() {
             <Link to="/training" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
               Training
             </Link>
-            <Link to="/game" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
-              Game
-            </Link>
+            <a href="/galactic.html" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
+            Game
+          </a>
           </div>
         </nav>
       )}

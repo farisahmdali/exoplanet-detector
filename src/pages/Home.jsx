@@ -202,9 +202,9 @@ function Home() {
           <Link to="/training" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
             Training
           </Link>
-          <Link to="/game" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
+          <a href="/galactic.html" className="text-white text-xl font-bold hover:opacity-80 transition-opacity">
             Game
-          </Link>
+          </a>
         </div>
       </nav>
 
