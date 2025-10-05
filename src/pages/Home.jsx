@@ -247,7 +247,7 @@ function Home() {
           className="flex flex-col items-center justify-center text-white z-10 w-full max-w-2xl md:items-end md:text-right"
           style={{ opacity: exoplanetOpacity }}
         >
-          <h2 className="text-5xl text-center md:text-6xl lg:text-7xl font-black uppercase mb-8 tracking-tight md:text-right">
+          <h2 className="text-5xl font-orbitron text-center md:text-6xl lg:text-7xl font-black uppercase mb-8 tracking-tight md:text-right">
             EXOPLANET
           </h2>
           <div className="space-y-6 text-lg md:text-xl leading-relaxed text-[#d2d2d2]  text-center md:text-right">
@@ -275,7 +275,7 @@ function Home() {
         </div>
       </div>
       <div className="px-28 relative z-10">
-        <div className="text-white text-center text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight mx-auto">
+        <div className="text-white font-orbitron text-center text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight mx-auto">
           Discovery of Exoplanets
         </div>
         
@@ -324,7 +324,7 @@ function Home() {
                 className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-all duration-300"
               />
             </div>
-              <h3 className="text-2xl font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">The Habitable Zone</h3>
+              <h3 className="text-2xl font-orbitron font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">The Habitable Zone</h3>
               <p className="text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
                 {infoCardsContent.habitableZone.description}
               </p>
@@ -342,7 +342,7 @@ function Home() {
                   className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-all duration-300"
                 />
               </div>
-              <h3 className="text-2xl font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">Why We Search?</h3>
+              <h3 className="text-2xl font-orbitron font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">Why We Search?</h3>
               <p className="text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
                 {infoCardsContent.detection.description}
               </p>
@@ -360,7 +360,7 @@ function Home() {
                     className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-all duration-300"
                   />
                 </div>
-                <h3 className="text-2xl font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">How Do We Find Exoplanets?</h3>
+                <h3 className="text-2xl font-orbitron font-black mb-3 text-[#ddd] group-hover:text-white transition-colors duration-300">How Do We Find Exoplanets?</h3>
                 <p className="text-sm text-white/70 font-light text-center leading-relaxed tracking-wide">
                   {infoCardsContent.finding.description}
                 </p>
