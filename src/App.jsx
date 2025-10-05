@@ -29,6 +29,27 @@ function App() {
 
   return (
     <>
+    <video
+        className="fixed top-0 left-0 w-full h-full object-cover z-0"
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{ playbackRate: 20 }}
+      >
+        <source src="./bg.mp4" type="video/mp4" />
+        {/* Fallback to background image if video fails to load */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            // backgroundImage: `url(${bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'fixed'
+          }}
+        />
+      </video>
       <AnimatePresence mode="wait">
         {showIntro && (
           <IntroAnimation onComplete={handleIntroComplete} />

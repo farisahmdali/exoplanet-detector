@@ -153,6 +153,40 @@
     }
   }
 
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
   /* High contrast utilities */
   .contrast-border {
     @apply border-2 border-contrast-medium;
@@ -170,4 +204,14 @@
   .container-padding {
     @apply px-4 sm:px-6 lg:px-8;
   }
+}
+
+
+@font-face {
+  font-family: 'orbitron';
+  src: url('./assets/fonts/orbitro.ttf');
+}
+
+.font-orbitron {
+  font-family: 'orbitron';
 }
