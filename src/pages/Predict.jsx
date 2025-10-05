@@ -356,7 +356,7 @@ function Predict() {
                 onClick={() => setMode('manual')}
                 className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
                   mode === 'manual'
-                    ? 'bg-neon-cyan text-dark-bg shadow-lg shadow-neon-cyan/30'
+                    ? 'bg-orange-400 text-dark-bg shadow-lg shadow-orange-400/30'
                     : 'text-contrast-medium hover:text-contrast-high'
                 }`}
               >
@@ -366,7 +366,7 @@ function Predict() {
                 onClick={() => setMode('csv')}
                 className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
                   mode === 'csv'
-                    ? 'bg-neon-cyan text-dark-bg shadow-lg shadow-neon-cyan/30'
+                    ? 'bg-orange-400 text-dark-bg shadow-lg shadow-orange-400/30'
                     : 'text-contrast-medium hover:text-contrast-high'
                 }`}
               >
@@ -376,7 +376,7 @@ function Predict() {
           </div>
           
           {/* Visual Separator */}
-          <div className="w-32 h-0.5 bg-neon-cyan mx-auto mb-12 animate-neon-pulse"></div>
+          <div className="w-32 h-0.5 bg-orange-400 mx-auto mb-12 animate-neon-pulse"></div>
         </section>
 
         {/* Main Content Grid */}
@@ -387,9 +387,9 @@ function Predict() {
             {predicting && (
             <div className="card-dark text-center">
               <div className="flex flex-col items-center justify-center space-y-6">
-                <div className="w-16 h-16 border-4 border-neon-cyan border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-16 h-16 border-4 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
                 <div>
-                  <h3 className="heading-tertiary mb-2 text-neon-cyan">
+                  <h3 className="heading-tertiary mb-2 text-orange-400">
                     {mode === 'csv' ? 'PROCESSING CSV DATA' : 'ANALYZING STELLAR DATA'}
                   </h3>
                   <p className="text-contrast-medium">
@@ -400,7 +400,7 @@ function Predict() {
                 </div>
                 <div className="w-full max-w-md">
                   <div className="h-2 bg-dark-border rounded-full overflow-hidden">
-                    <div className="h-full bg-neon-cyan animate-pulse"></div>
+                    <div className="h-full bg-orange-400 animate-pulse"></div>
                   </div>
                 </div>
               </div>
@@ -421,7 +421,7 @@ function Predict() {
           {mode === 'csv' && (
             <div className="card-dark">
               <div className="flex items-center space-x-3 mb-6">
-                <Upload className="w-6 h-6 text-neon-cyan" />
+                <Upload className="w-6 h-6 text-orange-400" />
                 <h2 className="heading-tertiary">UPLOAD CSV FILE</h2>
               </div>
 
@@ -432,7 +432,7 @@ function Predict() {
                   className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${
                     uploadedFile
                       ? 'border-neon-green bg-neon-green/10'
-                      : 'border-dark-border bg-dark-surface hover:bg-dark-hover hover:border-neon-cyan/50'
+                      : 'border-dark-border bg-dark-surface hover:bg-dark-hover hover:border-orange-400/50'
                   }`}
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -470,10 +470,10 @@ function Predict() {
 
               {/* CSV File Info */}
               {uploadedFile && (
-                <div className="bg-neon-cyan/10 border border-neon-cyan/30 rounded-xl p-4 mb-6">
+                <div className="bg-orange-400/10 border border-orange-400/30 rounded-xl p-4 mb-6">
                   <div className="flex items-start space-x-3">
-                    <Sparkles className="w-5 h-5 text-neon-cyan mt-0.5 flex-shrink-0" />
-                    <div className="text-sm text-neon-cyan">
+                    <Sparkles className="w-5 h-5 text-orange-400 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-orange-400">
                       <p className="font-medium mb-1">CSV Requirements:</p>
                       <ul className="space-y-1 text-xs">
                         <li>• Must contain light curve data columns</li>
@@ -491,7 +491,7 @@ function Predict() {
                 <button
                   onClick={handleCsvPredict}
                   disabled={!uploadedFile || predicting}
-                  className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary flex-1 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {predicting ? (
                     <>
@@ -517,12 +517,12 @@ function Predict() {
               </div>
 
               {/* Visual Enhancement */}
-              <div className="mt-8 bg-neon-purple/10 border border-neon-purple/30 rounded-xl p-6 overflow-hidden">
+              {/* <div className="mt-8 bg-neon-purple/10 border border-neon-purple/30 rounded-xl p-6 overflow-hidden">
                 <h3 className="heading-tertiary mb-4 text-center text-neon-purple">
                   PLANETARY DETECTION IN PROGRESS
                 </h3>
                 <OrbitingPlanets />
-              </div>
+              </div> */}
             </div>
           )}
 
@@ -531,7 +531,7 @@ function Predict() {
           <div className="card-dark">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
-                <BarChart3 className="w-6 h-6 text-neon-cyan" />
+                <BarChart3 className="w-6 h-6 text-orange-400" />
                 <h2 className="heading-tertiary">INPUT PARAMETERS</h2>
               </div>
               <button
@@ -554,7 +554,7 @@ function Predict() {
                   step="0.1"
                   value={parameters.koi_period}
                   onChange={(e) => handleParameterChange('koi_period', e.target.value)}
-                  className="w-full px-3 py-2 bg-dark-surface border border-dark-border rounded-lg text-contrast-high focus:outline-none focus:ring-2 focus:ring-neon-cyan focus:border-neon-cyan contrast-border-focus"
+                  className="w-full px-3 py-2 bg-dark-surface border border-dark-border rounded-lg text-contrast-high focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 contrast-border-focus"
                 />
                 <input
                   type="range"
@@ -563,7 +563,7 @@ function Predict() {
                   step="0.5"
                   value={parameters.koi_period}
                   onChange={(e) => handleParameterChange('koi_period', e.target.value)}
-                  className="w-full mt-2 accent-neon-cyan"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -577,7 +577,7 @@ function Predict() {
                   step="0.1"
                   value={parameters.koi_prad}
                   onChange={(e) => handleParameterChange('koi_prad', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -586,7 +586,7 @@ function Predict() {
                   step="0.1"
                   value={parameters.koi_prad}
                   onChange={(e) => handleParameterChange('koi_prad', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -600,7 +600,7 @@ function Predict() {
                   step="10"
                   value={parameters.koi_teq}
                   onChange={(e) => handleParameterChange('koi_teq', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -609,7 +609,7 @@ function Predict() {
                   step="10"
                   value={parameters.koi_teq}
                   onChange={(e) => handleParameterChange('koi_teq', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -623,7 +623,7 @@ function Predict() {
                   step="0.1"
                   value={parameters.koi_duration}
                   onChange={(e) => handleParameterChange('koi_duration', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -632,7 +632,7 @@ function Predict() {
                   step="0.1"
                   value={parameters.koi_duration}
                   onChange={(e) => handleParameterChange('koi_duration', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -646,7 +646,7 @@ function Predict() {
                   step="10"
                   value={parameters.koi_depth}
                   onChange={(e) => handleParameterChange('koi_depth', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -655,7 +655,7 @@ function Predict() {
                   step="10"
                   value={parameters.koi_depth}
                   onChange={(e) => handleParameterChange('koi_depth', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -669,7 +669,7 @@ function Predict() {
                   step="0.01"
                   value={parameters.koi_impact}
                   onChange={(e) => handleParameterChange('koi_impact', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -678,7 +678,7 @@ function Predict() {
                   step="0.01"
                   value={parameters.koi_impact}
                   onChange={(e) => handleParameterChange('koi_impact', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -692,7 +692,7 @@ function Predict() {
                   step="50"
                   value={parameters.koi_steff}
                   onChange={(e) => handleParameterChange('koi_steff', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -701,7 +701,7 @@ function Predict() {
                   step="50"
                   value={parameters.koi_steff}
                   onChange={(e) => handleParameterChange('koi_steff', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
 
@@ -715,7 +715,7 @@ function Predict() {
                   step="0.5"
                   value={parameters.koi_model_snr}
                   onChange={(e) => handleParameterChange('koi_model_snr', e.target.value)}
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <input
                   type="range"
@@ -724,7 +724,7 @@ function Predict() {
                   step="0.5"
                   value={parameters.koi_model_snr}
                   onChange={(e) => handleParameterChange('koi_model_snr', e.target.value)}
-                  className="w-full mt-2"
+                  className="w-full mt-2 accent-orange-400"
                 />
               </div>
             </div>
@@ -742,7 +742,7 @@ function Predict() {
                   <select
                     value={parameters.koi_fpflag_ss}
                     onChange={(e) => handleParameterChange('koi_fpflag_ss', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   >
                     <option value={0}>0 - Not a stellar eclipse</option>
                     <option value={1}>1 - Likely stellar eclipse</option>
@@ -755,7 +755,7 @@ function Predict() {
                   <select
                     value={parameters.koi_fpflag_ec}
                     onChange={(e) => handleParameterChange('koi_fpflag_ec', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   >
                     <option value={0}>0 - Not an eclipsing binary</option>
                     <option value={1}>1 - Likely eclipsing binary</option>
@@ -768,7 +768,7 @@ function Predict() {
                     step="0.1"
                     value={parameters.koi_time0bk}
                     onChange={(e) => handleParameterChange('koi_time0bk', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -778,7 +778,7 @@ function Predict() {
                     step="0.1"
                     value={parameters.koi_insol}
                     onChange={(e) => handleParameterChange('koi_insol', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -788,7 +788,7 @@ function Predict() {
                     step="0.1"
                     value={parameters.koi_slogg}
                     onChange={(e) => handleParameterChange('koi_slogg', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -798,7 +798,7 @@ function Predict() {
                     step="0.1"
                     value={parameters.koi_srad}
                     onChange={(e) => handleParameterChange('koi_srad', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -808,7 +808,7 @@ function Predict() {
                     step="1"
                     value={parameters.ra}
                     onChange={(e) => handleParameterChange('ra', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -818,7 +818,7 @@ function Predict() {
                     step="1"
                     value={parameters.dec}
                     onChange={(e) => handleParameterChange('dec', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -828,7 +828,7 @@ function Predict() {
                     step="0.1"
                     value={parameters.koi_kepmag}
                     onChange={(e) => handleParameterChange('koi_kepmag', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
@@ -838,7 +838,7 @@ function Predict() {
                     step="1"
                     value={parameters.koi_tce_plnt_num}
                     onChange={(e) => handleParameterChange('koi_tce_plnt_num', e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
               </div>
@@ -848,7 +848,8 @@ function Predict() {
             <button
               onClick={handlePredict}
               disabled={predicting}
-              className="btn-primary w-full mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full mt-6 disabled:opacity-50 flex justify-center items-center gap-5 disabled:cursor-not-allowed"
+              
             >
               {predicting ? (
                 <>
@@ -894,8 +895,8 @@ function Predict() {
                   onClick={() => setSelectedModel(model.id)}
                   className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
                     selectedModel === model.id
-                      ? 'bg-neon-cyan/10 border-neon-cyan/40 text-neon-cyan'
-                      : 'bg-dark-surface border-dark-border hover:bg-dark-hover hover:border-neon-cyan/30'
+                      ? 'bg-orange-400/10 border-orange-400/40 text-orange-400'
+                      : 'bg-dark-surface border-dark-border hover:bg-dark-hover hover:border-orange-400/30'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">

@@ -16,7 +16,7 @@ export default {
           hover: '#1f1f1f',     // Hover states
         },
         neon: {
-          cyan: '#00ffff',      // Bright cyan
+          orange: '#ff8c00',    // Bright orange
           green: '#00ff00',     // Electric green
           pink: '#ff00ff',      // Hot pink
           yellow: '#ffff00',    // Electric yellow
@@ -27,7 +27,7 @@ export default {
           high: '#ffffff',      // Pure white text
           medium: '#e5e5e5',    // Light gray text
           low: '#999999',       // Dimmed text
-          accent: '#00ffff',    // Cyan accent
+          accent: '#ff8c00',    // Orange accent
         }
       },
       animation: {

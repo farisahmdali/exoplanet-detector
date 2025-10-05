@@ -18,7 +18,7 @@
 
   /* High contrast selection */
   ::selection {
-    @apply bg-neon-cyan text-dark-bg;
+    @apply bg-orange-400 text-dark-bg;
   }
 
   /* Custom scrollbar */
@@ -42,29 +42,29 @@
 @layer components {
   /* Minimalist button styles */
   .btn-primary {
-    @apply bg-neon-cyan text-dark-bg font-bold py-3 px-6 rounded-lg 
-           hover:bg-neon-blue transition-all duration-200 
-           shadow-lg hover:shadow-neon-cyan/50 border-2 border-neon-cyan
+    @apply bg-orange-400 text-dark-bg font-bold py-3 px-6 rounded-lg 
+           hover:bg-orange-500 transition-all duration-200 
+           shadow-lg hover:shadow-orange-400/50 border-2 border-orange-400
            hover:scale-105 active:scale-95;
   }
 
   .btn-secondary {
     @apply bg-transparent text-contrast-high font-bold py-3 px-6 rounded-lg 
-           border-2 border-contrast-medium hover:border-neon-cyan hover:text-neon-cyan
-           transition-all duration-200 hover:shadow-lg hover:shadow-neon-cyan/30
+           border-2 border-contrast-medium hover:border-orange-400 hover:text-orange-400
+           transition-all duration-200 hover:shadow-lg hover:shadow-orange-400/30
            hover:scale-105 active:scale-95;
   }
 
   /* Card styles */
   .card-dark {
     @apply bg-dark-card border border-dark-border rounded-xl p-6
-           hover:border-neon-cyan/30 transition-all duration-300
-           shadow-xl hover:shadow-2xl hover:shadow-neon-cyan/10;
+           hover:border-orange-400/30 transition-all duration-300
+           shadow-xl hover:shadow-2xl hover:shadow-orange-400/10;
   }
 
   /* Neon text effect */
   .text-neon {
-    @apply text-neon-cyan animate-glow;
+    @apply text-orange-400 animate-glow;
     text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
   }
 
@@ -193,7 +193,12 @@
   }
 
   .contrast-border-focus {
-    @apply focus:border-neon-cyan focus:ring-2 focus:ring-neon-cyan/50;
+    @apply focus:border-orange-400 focus:ring-2 focus:ring-orange-400/50;
+  }
+
+  /* Range slider styling for orange accent */
+  input[type="range"] {
+    accent-color: #fb923c; /* orange-400 */
   }
 
   /* Minimalist spacing */

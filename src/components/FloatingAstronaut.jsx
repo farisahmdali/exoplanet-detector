@@ -44,7 +44,7 @@ function FloatingAstronaut() {
             <div className="w-12 h-16 bg-gradient-to-b from-gray-400 to-gray-500 rounded border-2 border-gray-600/50">
               {/* Thruster flames */}
               <div className="absolute -bottom-8 left-2 w-2 h-8 bg-gradient-to-b from-orange-400 via-red-500 to-transparent rounded-full blur-sm animate-pulse"></div>
-              <div className="absolute -bottom-6 left-5 w-2 h-6 bg-gradient-to-b from-blue-400 via-cyan-500 to-transparent rounded-full blur-sm animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+              <div className="absolute -bottom-6 left-5 w-2 h-6 bg-gradient-to-b from-blue-400 via-orange-500 to-transparent rounded-full blur-sm animate-pulse" style={{ animationDelay: '0.3s' }}></div>
               <div className="absolute -bottom-7 left-8 w-2 h-7 bg-gradient-to-b from-orange-400 via-yellow-500 to-transparent rounded-full blur-sm animate-pulse" style={{ animationDelay: '0.6s' }}></div>
             </div>
           </div>
