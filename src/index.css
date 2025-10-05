@@ -220,3 +220,28 @@
 .font-orbitron {
   font-family: 'orbitron';
 }
+
+/* Scale in-out animation */
+@keyframes scaleInOut {
+  0% {
+    transform: scale(4);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.scale-in-out {
+  animation: scaleInOut 3.2s ease-out forwards;
+}
+
+.scale-in-out2{
+  opacity: 0;
+  animation: scaleInOut 3.2s ease-out 2.5s forwards;
+}
+

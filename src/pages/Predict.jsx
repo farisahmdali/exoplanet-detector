@@ -173,11 +173,39 @@ function Predict() {
       const mockConfidence = 0.947
       const mockPrediction = mockConfidence > 0.5 ? 'CONFIRMED' : 'FALSE POSITIVE'
       
+      // Generate mock reasoning based on parameters
+      const mockReasoning = {
+        summary: mockPrediction === 'CONFIRMED' 
+          ? "The model predicts this is a CONFIRMED exoplanet based on the transit characteristics analysis."
+          : "The model predicts this is a FALSE POSITIVE based on the transit characteristics analysis.",
+        supporting_factors: mockPrediction === 'CONFIRMED' ? [
+          `Strong transit signal with depth of ${parameters.koi_depth?.toFixed(0) || 616} ppm`,
+          "No eclipsing binary contamination detected",
+          "No stellar eclipse contamination detected",
+          `Signal-to-noise ratio of ${parameters.koi_model_snr?.toFixed(1) || 35.8} indicates reliable detection`
+        ] : [
+          "Low signal-to-noise ratio indicates unreliable detection",
+          "Transit characteristics suggest stellar variability"
+        ],
+        concerning_factors: mockPrediction === 'CONFIRMED' ? [
+          "Review individual parameters for any unusual values"
+        ] : [
+          "Eclipsing binary flag may be set",
+          "Stellar eclipse flag may be set",
+          "Weak transit signal detected"
+        ],
+        confidence_explanation: `High confidence score of ${(mockConfidence * 100).toFixed(1)}% indicates strong model certainty in this classification.`,
+        recommendation: mockPrediction === 'CONFIRMED' 
+          ? "Strong candidate for follow-up observations. Consider spectroscopic confirmation."
+          : "Likely false positive. Consider re-examining the light curve data."
+      }
+      
       setPredictions([{
         id: 1,
         prediction: mockPrediction,
         probability: mockConfidence,
-        confidence: mockConfidence > 0.8 ? 'High' : (mockConfidence > 0.5 ? 'Medium' : 'Low')
+        confidence: mockConfidence > 0.8 ? 'High' : (mockConfidence > 0.5 ? 'Medium' : 'Low'),
+        reasoning: mockReasoning
       }])
       
       setConfidence({
@@ -185,7 +213,8 @@ function Predict() {
         exoplanetDetected: mockConfidence > 0.5,
         numberOfCandidates: mockConfidence > 0.5 ? 1 : 0,
         processingTime: '0.2s',
-        prediction: mockPrediction
+        prediction: mockPrediction,
+        reasoning: mockReasoning
       })
       setShowResultsModal(true) // Show modal for mock data too
     }
@@ -337,7 +366,7 @@ function Predict() {
       <div className="max-w-7xl mx-auto container-padding">
         
         {/* Page Header - Minimalist */}
-        <section className="text-center mb-16">
+        <section className="text-center mb-16 mt-16">
           <h1 className="heading-primary mb-6">
             PREDICTION ENGINE
             <br />
@@ -1229,18 +1258,145 @@ function Predict() {
                       </div>
                     )}
 
-                    {/* Interpretation */}
-                    <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                      <p className="text-sm text-gray-300">
-                        <strong className="text-white">Interpretation:</strong> {' '}
-                        {prediction.prediction === 'CONFIRMED' 
-                          ? 'The model predicts this is a CONFIRMED exoplanet based on the transit characteristics. The high confidence score suggests the signal is consistent with a planetary transit.'
-                          : 'The model predicts this is a FALSE POSITIVE. The signal characteristics suggest it may be caused by stellar variability, instrumental artifacts, or other non-planetary phenomena.'}
-                      </p>
-                    </div>
+                    {/* Detailed Reasoning */}
+                    {prediction.reasoning && (
+                      <div className="space-y-4">
+                        {/* Summary */}
+                        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                          <h5 className="text-sm font-semibold text-white mb-2">Analysis Summary</h5>
+                          <p className="text-sm text-gray-300">{prediction.reasoning.summary}</p>
+                        </div>
+
+                        {/* Supporting Factors */}
+                        {prediction.reasoning.supporting_factors && prediction.reasoning.supporting_factors.length > 0 && (
+                          <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                            <h5 className="text-sm font-semibold text-green-400 mb-3 flex items-center">
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              Supporting Evidence ({prediction.reasoning.supporting_factors.length})
+                            </h5>
+                            <ul className="space-y-2">
+                              {prediction.reasoning.supporting_factors.map((factor, index) => (
+                                <li key={index} className="text-sm text-green-300 flex items-start">
+                                  <span className="text-green-400 mr-2">•</span>
+                                  {factor}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Concerning Factors */}
+                        {prediction.reasoning.concerning_factors && prediction.reasoning.concerning_factors.length > 0 && (
+                          <div className="p-4 bg-red-500/10 rounded-lg border border-red-500/30">
+                            <h5 className="text-sm font-semibold text-red-400 mb-3 flex items-center">
+                              <AlertCircle className="w-4 h-4 mr-2" />
+                              Concerning Factors ({prediction.reasoning.concerning_factors.length})
+                            </h5>
+                            <ul className="space-y-2">
+                              {prediction.reasoning.concerning_factors.map((factor, index) => (
+                                <li key={index} className="text-sm text-red-300 flex items-start">
+                                  <span className="text-red-400 mr-2">•</span>
+                                  {factor}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Confidence Explanation */}
+                        {prediction.reasoning.confidence_explanation && (
+                          <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/30">
+                            <h5 className="text-sm font-semibold text-blue-400 mb-2">Confidence Assessment</h5>
+                            <p className="text-sm text-blue-300">{prediction.reasoning.confidence_explanation}</p>
+                          </div>
+                        )}
+
+                        {/* Recommendation */}
+                        {prediction.reasoning.recommendation && (
+                          <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/30">
+                            <h5 className="text-sm font-semibold text-orange-400 mb-2">Recommendation</h5>
+                            <p className="text-sm text-orange-300">{prediction.reasoning.recommendation}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Fallback Interpretation */}
+                    {!prediction.reasoning && (
+                      <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                        <p className="text-sm text-gray-300">
+                          <strong className="text-white">Interpretation:</strong> {' '}
+                          {prediction.prediction === 'CONFIRMED' 
+                            ? 'The model predicts this is a CONFIRMED exoplanet based on the transit characteristics. The high confidence score suggests the signal is consistent with a planetary transit.'
+                            : 'The model predicts this is a FALSE POSITIVE. The signal characteristics suggest it may be caused by stellar variability, instrumental artifacts, or other non-planetary phenomena.'}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
+              )}
+
+              {/* CSV Analysis Summary */}
+              {mode === 'csv' && confidence && confidence.reasoning && (
+                <div className="mb-8" onClick={(e) => e.stopPropagation()}>
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
+                    <BarChart3 className="w-6 h-6 text-indigo-400" />
+                    <span>CSV Analysis Summary</span>
+                  </h3>
+                  
+                  <div className="space-y-4 mb-6">
+                    {/* Summary */}
+                    <div className="p-4 bg-white/10 rounded-lg border border-white/20">
+                      <h5 className="text-sm font-semibold text-white mb-2">Overall Analysis</h5>
+                      <p className="text-sm text-gray-300">{confidence.reasoning.summary}</p>
+                    </div>
+
+                    {/* Supporting Factors */}
+                    {confidence.reasoning.supporting_factors && confidence.reasoning.supporting_factors.length > 0 && (
+                      <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                        <h5 className="text-sm font-semibold text-green-400 mb-3 flex items-center">
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Positive Indicators
+                        </h5>
+                        <ul className="space-y-1">
+                          {confidence.reasoning.supporting_factors.map((factor, index) => (
+                            <li key={index} className="text-sm text-green-300 flex items-start">
+                              <span className="text-green-400 mr-2">•</span>
+                              {factor}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Concerning Factors */}
+                    {confidence.reasoning.concerning_factors && confidence.reasoning.concerning_factors.length > 0 && (
+                      <div className="p-4 bg-red-500/10 rounded-lg border border-red-500/30">
+                        <h5 className="text-sm font-semibold text-red-400 mb-3 flex items-center">
+                          <AlertCircle className="w-4 h-4 mr-2" />
+                          Areas of Concern
+                        </h5>
+                        <ul className="space-y-1">
+                          {confidence.reasoning.concerning_factors.map((factor, index) => (
+                            <li key={index} className="text-sm text-red-300 flex items-start">
+                              <span className="text-red-400 mr-2">•</span>
+                              {factor}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Recommendation */}
+                    {confidence.reasoning.recommendation && (
+                      <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/30">
+                        <h5 className="text-sm font-semibold text-orange-400 mb-2">Next Steps</h5>
+                        <p className="text-sm text-orange-300">{confidence.reasoning.recommendation}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
 
               {/* Complete CSV Results Table */}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from './components/Layout'
 import Home from './pages/Home'
@@ -7,17 +7,18 @@ import Predict from './pages/Predict'
 import Training from './pages/Training'
 import Database from './pages/Database'
 import About from './pages/About'
-import IntroAnimation from './components/IntroAnimation'
+import Vid from './pages/Vid'
 
 function App() {
-  const [showIntro, setShowIntro] = useState(false)
-  const [introComplete, setIntroComplete] = useState(false)
+  const [showIntro, setShowIntro] = useState(true)
+  const [introComplete, setIntroComplete] = useState(true)
 
   useEffect(() => {
 
-      setShowIntro(false)
-      setIntroComplete(true)
-    
+      setTimeout(() => {
+        setIntroComplete(false)
+      }, 4000)
+     
   }, [])
 
   const handleIntroComplete = () => {
@@ -50,20 +51,22 @@ function App() {
           }}
         />
       </video>
+    {introComplete ? (
       <AnimatePresence mode="wait">
         {showIntro && (
-          <IntroAnimation onComplete={handleIntroComplete} />
+          <Vid setIntroComplete={setIntroComplete} />
         )}
-      </AnimatePresence>
+      </AnimatePresence>):
 
-      {introComplete && (
-        <motion.div
+
+<motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
           <Router>
             <Routes>
+                <Route path="/vid"  element={<Vid />} />
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="predict" element={<Predict />} />
@@ -74,7 +77,8 @@ function App() {
             </Routes>
           </Router>
         </motion.div>
-      )}
+      
+    }
     </>
   )
 }

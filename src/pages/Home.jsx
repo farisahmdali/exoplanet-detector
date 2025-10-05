@@ -16,7 +16,7 @@ function Home() {
     gasGiants: {
       title: "Gas Giants",
       color: "orange",
-      description: "Massive planets composed primarily of hydrogen and helium, similar to Jupiter and Saturn.",
+      description: `Gas giants are very large planets made mostly of hydrogen and helium, like Jupiter and Saturn. Some gas giants called "Hot Jupiters" orbit very close to their stars, making them extremely hot. They don’t have a solid surface but have thick swirling gas atmospheres`,
       detailedContent: {
         composition: "Primarily hydrogen (75%) and helium (24%), with trace amounts of methane, ammonia, water vapor, and other compounds",
         size: "Can be 10-1000 times more massive than Earth, with diameters ranging from 2-15 times Earth's size",
@@ -30,7 +30,7 @@ function Home() {
     superEarths: {
       title: "Super-Earths",
       color: "green",
-      description: "Rocky planets larger than Earth but smaller than Neptune, potentially habitable worlds.",
+      description: `Super-Earths are planets larger than Earth but smaller than Neptune, mostly made of rock. They may have atmospheres, and some might have oceans or conditions that could support life. This type bridges the gap between small rocky planets and bigger gas-rich ones.`,
       detailedContent: {
         composition: "Rocky cores with possible thick atmospheres, containing silicate minerals, metals, and potentially water",
         size: "1.2-10 times Earth's mass, with radii typically 1.2-2.5 times Earth's size",
@@ -44,21 +44,21 @@ function Home() {
     iceGiants: {
       title: "Ice Giants",
       color: "orange",
-      description: "Planets composed of water, methane, and ammonia ices, similar to Uranus and Neptune.",
+      description: `Ice giants are fascinating worlds composed primarily of water, methane, and ammonia ices surrounding rocky cores. Unlike gas giants that are mostly hydrogen and helium, ice giants have thick mantles of "ices" (which are actually hot, dense fluids under extreme pressure). These planets represent a unique class of worlds that are common in our galaxy but absent from our inner solar system.`,
       detailedContent: {
-        composition: "Water, methane, and ammonia ices mixed with rock and metal, with hydrogen-helium atmospheres",
-        size: "10-20 times Earth's mass, with radii 3-4 times Earth's size",
-        characteristics: "Extremely cold outer regions, potential subsurface oceans, and unusual magnetic fields",
-        examples: "Uranus and Neptune in our solar system, with exoplanets like Kepler-421b and HAT-P-11b",
-        discovery: "Challenging to detect due to their distance from host stars and smaller transit signals",
-        atmosphere: "Rich in water vapor, methane, and other volatiles, with complex weather patterns",
-        oceans: "May harbor subsurface oceans beneath thick ice layers, potentially habitable environments"
+        composition: "Ice giants have a layered structure with a small rocky core surrounded by a mantle of water, methane, and ammonia ices under extreme pressure and temperature. The outer atmosphere contains hydrogen, helium, and trace amounts of hydrocarbons. Despite being called 'ice,' these materials exist as hot, dense fluids due to the intense pressure and heat within the planet.",
+        size: "Typically 10-20 times Earth's mass with radii 3-4 times Earth's size, making them intermediate between terrestrial planets and gas giants. Their density is much higher than gas giants due to their ice-rich composition, and they represent the most common planetary type found in exoplanet surveys.",
+        characteristics: "Ice giants exhibit unique features including tilted magnetic fields that don't align with their rotation axes, extremely cold outer atmospheres reaching -200°C, dynamic weather systems with supersonic winds, and potential subsurface oceans beneath their ice layers. Many have complex ring systems and numerous moons.",
+        examples: "Uranus and Neptune are the ice giants in our solar system, while notable exoplanet examples include Kepler-421b (orbiting in the habitable zone), HAT-P-11b (a warm Neptune), and GJ 436b (a hot Neptune with an evaporating atmosphere). These worlds show incredible diversity in temperature and atmospheric conditions.",
+        discovery: "Ice giant exoplanets are challenging to detect because they often orbit far from their host stars, producing weaker transit signals and longer orbital periods. However, they're actually quite common, with surveys suggesting they may be the most abundant type of planet in the galaxy, particularly around red dwarf stars.",
+        atmosphere: "Their atmospheres are rich in water vapor, methane (which gives them their blue color), hydrogen sulfide, and other volatiles. They exhibit complex weather patterns including massive storms, jet streams moving at thousands of kilometers per hour, and seasonal changes that can last decades due to their long orbital periods.",
+        oceans: "Many ice giants may harbor vast subsurface oceans beneath their thick ice crusts, similar to Jupiter's moon Europa. These hidden oceans could potentially support life, making ice giants important targets in the search for extraterrestrial biology. The interaction between their magnetic fields and these oceans could create unique chemical environments."
       }
     },
     terrestrial: {
       title: "Terrestrial",
       color: "blue",
-      description: "Rocky planets similar to Earth, with solid surfaces and potentially habitable conditions.",
+      description: `Terrestrial planets are similar in size or smaller than Earth and made of rock, silicate, water, or carbon. They might have atmospheres, oceans, or other signs that could support life. These are the most Earth-like planets scientists are very interested in studying.`,
       detailedContent: {
         composition: "Rocky surfaces composed of silicate minerals, metals, and potentially water",
         size: "Similar to Earth's mass and size, ranging from 0.5-2 times Earth's radius",
@@ -182,6 +182,9 @@ function Home() {
   return (
     <div 
       className="min-h-[200vh] overflow-x-hidden relative"
+      style={{
+        transition: 'all 10000ms ease-in'
+      }}
     >
       {/* Background Video */}
       
@@ -230,6 +233,9 @@ function Home() {
           className="relative z-10 text-center px-4 md:px-8"
           style={{ opacity: heroOpacity }}
         >
+          <h1 className="mt-10 text-orange-500 md:mt-15 font-orbitron text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase mb-4 md:mb-6 tracking-tight leading-tight mx-auto animate-pulse drop-shadow-[0_0_20px_rgba(251,146,60,0.8)] shadow-orange-400">
+            Exoplanet Hunter
+          </h1>
           <h1 className="text-white mt-20 md:mt-15 font-orbitron text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase mb-4 md:mb-6 tracking-tight leading-tight mx-auto">
             Journey Beyond Our Solar System
           </h1>
