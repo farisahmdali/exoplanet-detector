@@ -232,9 +232,9 @@ function Home() {
           <h1 className="text-white  mt-15 font-orbitron text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-6 tracking-tight leading-tight  mx-auto">
             Journey Beyond Our Solar System
           </h1>
-              {/* <p className="text-white  text-[15px] pt-16 md:text-2xl mb-12 font-light max-w-4xl mx-auto">
+              <p className="text-white  text-[15px]  md:text-2xl mb-12 font-light max-w-4xl mx-auto">
               Experience the wonder of exoplanet discovery as you traverse uncharted cosmic realms, unveiling breathtaking alien landscapes, uncovering mysterious atmospheric compositions, witnessing extraordinary celestial phenomena, and igniting a profound and limitless curiosity that fuels scientific exploration, inspires technological innovation, and unites collective humanity in awe of the universe’s boundless infinite majesty.
-            </p> */}
+            </p>
          
         </div>
       </div>
